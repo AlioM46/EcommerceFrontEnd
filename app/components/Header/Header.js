@@ -1,0 +1,142 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping, faBars, faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "@/app/context/AuthContext";
+import Button from "../Button/Button";
+import "./Header.css";
+import "../../globals.css";
+
+export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const { isAuthenticated, logout, isAdmin, isOwner } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname(); // current URL
+
+  console.log(pathname)
+
+  const navLinks = [
+    { href: "/", label: "الصفحة الرئيسية" },
+    { href: "/products", label: "المنتجات" },
+    // { href: "/discounts", label: "مؤقت" },
+    { href: "/store-policy", label: "سياسة المتجر" },
+  ];
+
+  if (isAdmin || isOwner) navLinks.push({ href: "/dashboard", label: "Dashboard" });
+
+  const handleSearch = () => {
+    if (!searchQuery.trim()) return;
+    router.push(`/products?البحث-عن=${encodeURIComponent(searchQuery)}`);
+    setMenuOpen(false);
+    setSearchQuery("");
+  };
+
+  return (
+    <header>
+      <div className="container">
+        {/* Logo */}
+        <Link href="/" className="logo">
+          <Image
+            src="/logo.svg"
+            alt="Logo"
+            width={120}
+            height={60}
+            className="logo-image"
+          />
+        </Link>
+
+        {/* Hamburger Icon */}
+        <button
+          className="menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} size="lg" />
+        </button>
+
+        {/* Nav Bar */}
+        <nav className={`navBar ${menuOpen ? "active" : ""}`}>
+          <div className="navbar-links-container">
+            {navLinks.map((link) => {
+        return <Link
+                key={link.href}
+                href={link.href}
+                className={`nav-link ${
+                  pathname === link?.href || pathname?.startsWith(link.href + "/")
+                    ? "active-link"
+                    : ""
+                }`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            })}
+          </div>
+
+          {/* Search */}
+          <div className="header-search-container">
+            <input
+              className="header-searchBar"
+              type="text"
+              placeholder="ابحث عن منتج..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            />
+            <button className="search-button" onClick={handleSearch}>
+              <FontAwesomeIcon icon={faSearch} size="sm" />
+            </button>
+          </div>
+
+          {/* Auth Buttons & Cart */}
+          <div>
+            {isAuthenticated ? (
+              <Button
+                onClick={() => {
+                  logout();
+                  setMenuOpen(false);
+                }}
+              >
+                Logout
+              </Button>
+            ) : (
+              <>
+                <Button>
+                  <Link
+                    href="/login"
+                    className="login-link"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    تسجيل الدخول
+                  </Link>
+                </Button>
+                <Button>
+                  <Link
+                  
+                    href="/sign-up"
+                    className="signup-link"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    انشاء حساب
+                  </Link>
+                </Button>
+              </>
+            )}
+            <Link
+              href="/cart"
+              className="cart-icon"
+              onClick={() => setMenuOpen(false)}
+            >
+              <FontAwesomeIcon icon={faCartShopping} size="lg" />
+            </Link>
+          </div>
+        </nav>
+      </div>
+    </header>
+  );
+}

@@ -1,0 +1,57 @@
+/* add-update-category.css */
+.update-category {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.update-category h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.update-category label {
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.update-category input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.update-category input:disabled {
+  background: #f5f5f5;
+  color: #555;
+}
+
+.update-category button {
+  padding: 0.7rem;
+  background-color: #19A34A;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.update-category button:hover {
+  background-color: #148234;
+}
+
+.update-category div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}

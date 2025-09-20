@@ -1,0 +1,15 @@
+.product-carousel {
+  margin-bottom: 5rem ;
+}
+
+.swiper-pagination-bullet {
+  padding: 1px;
+  width: 10px;
+  height: 10px;
+}
+
+.swiper-slide {
+  height: auto !important;
+  margin-bottom: 2.5rem;
+}
+

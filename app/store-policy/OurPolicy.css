@@ -1,0 +1,56 @@
+/* Page container */
+.policy-container {
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  direction: rtl;
+  margin-top: 2rem;
+
+}
+
+/* Content box */
+.policy-box {
+  max-width: 800px;
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  line-height: 1.8;
+}
+
+/* Title */
+.policy-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #222;
+}
+
+/* Divider below title */
+.divider {
+  width: 80px;
+  height: 4px;
+  background: #AA7474;
+  margin: 1rem auto 2rem;
+  border-radius: 2px;
+}
+
+/* Paragraph text */
+.policy-text {
+  font-size: 1.1rem;
+  color: #444;
+  margin-bottom: 1.5rem;
+}
+
+/* Highlighted text */
+.highlight {
+  color: #AA7474;
+  font-weight: 700;
+}
+
+/* Emoji styling (optional) */
+.policy-text span.emoji {
+  font-size: 1.2rem;
+}

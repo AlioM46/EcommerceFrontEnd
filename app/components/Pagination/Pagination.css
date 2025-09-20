@@ -1,0 +1,71 @@
+/* Container for product grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Pagination controls wrapper */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 2rem 0;
+}
+
+/* Page buttons */
+.pagination button {
+  width: 70px;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #e5e7eb; /* light gray */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #d1d5db; /* darker gray */
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Active page */
+.pagination button.active {
+  background-color: #3b82f6 !important; /* blue */
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.ellipsis {
+  padding: 6px 10px;
+  color: #666;
+  font-size: 14px;
+}
+
+
+
+.pagination-searchBar {
+  margin: 1rem 0;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+  /* background: var(--color-background-primary); */
+  background:white;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: all 0.3s ease-in-out;
+}
+
+.pagination-searchBar:focus-within {
+  box-shadow: 0 0 0 2px rgba(0,112,243,0.2);
+}

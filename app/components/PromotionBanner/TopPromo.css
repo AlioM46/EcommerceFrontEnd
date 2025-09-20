@@ -1,0 +1,60 @@
+.endless-promo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #AA7474;
+  color: white;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 9999;
+}
+
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeAnim 30s linear infinite;
+}
+
+.marquee__text {
+  white-space: nowrap;
+  padding-right: 3rem; /* spacing between repetitions */
+}
+
+.highlight {
+  font-weight: 700;
+  color: #fff79a;
+}
+
+.endless-promo__close {
+  position: absolute;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Seamless marquee animation */
+@keyframes marqueeAnim {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
+@media (max-width:768px) {
+.marquee {
+
+  font-size: 14px;
+  animation: marqueeAnim 50s linear infinite;
+}
+
+}

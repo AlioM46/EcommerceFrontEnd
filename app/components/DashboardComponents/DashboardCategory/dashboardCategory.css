@@ -1,0 +1,23 @@
+.dashboard-category-container {
+  padding: 1rem;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+
+}
+
+
+.category-grid .category-card {
+    width: 100%;
+}
+
+
+
+.category-card-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

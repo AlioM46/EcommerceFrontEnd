@@ -1,0 +1,250 @@
+/* PRODUCT CONTAINER */
+.prd-product-container {
+    display: flex;
+    flex-direction: column-reverse; /* stack on mobile */
+    gap: 2rem;
+    padding: 2rem;
+    background-color: var(--color-background-thirdly);
+    border-radius: 12px;
+    min-height: 100vh; /* full viewport height on mobile */
+    box-sizing: border-box;
+    margin: 2rem 0;
+}
+
+/* LEFT & RIGHT SECTIONS */
+.prd-product-info, .prd-product-images {
+    flex: 1 1 auto; /* allow to grow naturally */
+    
+}
+
+/* DESKTOP LAYOUT */
+@media (min-width: 769px) {
+    .prd-product-container {
+        flex-direction: row; 
+        align-items: flex-start;
+    }
+
+    .prd-main-image {
+        width: 100%;
+    }
+}
+
+/* LEFT SIDE (INFO) */
+.prd-product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    direction: rtl;
+}
+
+.prd-product-name {
+    font-size: 1.65rem !important;
+    font-weight: bold !important;
+    color: var(--color-text-links) !important;
+    max-width: 600px;
+}
+
+.prd-product-inStock {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: green !important;
+}
+
+.prd-product-outOfStock {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: red !important;
+}
+
+.prd-product-price {
+    display: flex;
+    flex-direction: column;
+    gap: 0  !important;
+    margin-bottom: 2rem;
+}
+
+.prd-price {
+    font-weight: bolder !important;
+    font-size: 1.8rem !important;
+    color: var(--color-text-primary) !important;
+}
+
+.prd-old-price {
+    text-decoration: line-through ;
+    color: var(--color-text-secondary) !important;
+    font-size: 1.2rem !important;
+    font-weight: 500 !important;
+}
+
+.prd-product-info > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.prd-product-label, .prd-product-label h1  {
+    display: inline !important;
+}
+.prd-product-label h1 {
+    margin-left: 1.5rem;
+    font-size: 1.5rem;
+    line-height: 1.7;
+}
+.prd-product-label svg {
+    font-size: 1.75rem;
+    color: var(--color-text-links) !important;
+}
+
+.prd-product-description {
+    max-width: 600px;
+}
+
+.prd-product-description h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-primary) !important;
+}
+
+.prd-product-description p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary) !important;
+}
+.prd-product-buttons {
+    display: flex;
+    flex-wrap: wrap;  
+    gap: 1rem;                /* space between buttons */
+    margin: 1rem 0;
+}
+
+.prd-product-buttons button {
+    flex: 1 1 200px;          /* each button grows equally, minimum width 200px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;              /* space between icon and text */
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    min-width: 200px ;
+    height: 60px;
+}
+
+/* Hover effect */
+.prd-product-buttons button:hover {
+    transform: translateY(-2px);
+    background-color: #f0f0f0; /* optional hover color */
+}
+
+/* If you want different colors for cart and WhatsApp button */
+.prd-product-buttons button:first-child {
+    background-color: var(--f1f0ea) !important;
+    border: 1px solid black;
+    color: var(--color-text-primary) !important;
+}
+
+.prd-product-buttons button:last-child {
+    background-color: #25D366 ; /* WhatsApp green */
+    color: white ;
+}
+
+@media (max-width: 768px) {
+    .prd-product-buttons button {
+        min-width: 100% !important;
+    }
+}
+
+/* RIGHT SIDE (IMAGES) */
+.prd-product-images {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* MAIN PRODUCT IMAGE */
+.prd-main-image {
+    min-width:300px;
+    width: 100%;           
+    max-width: 550px;      
+    aspect-ratio: 1 / 1.2; 
+    object-fit: contain;   
+    border-radius: 8px;
+}
+
+/* IMAGE THUMBNAILS SLIDER */
+.prd-images-list-wrapper {
+    position: relative;
+    overflow-x: auto;  /* allow horizontal scroll */
+}
+
+.prd-images-list {
+    display: flex;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+    scroll-behavior: smooth;
+}
+
+.prd-images-list img {
+    max-width: 100px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.prd-images-list img:hover {
+    transform: scale(1.01);
+}
+
+/* ARROW BUTTONS */
+.prd-btn-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.prd-arrow-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255,255,255,0.8);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.prd-size-tag,
+.prd-color-circle {
+    border: 1px solid var(--border-color);
+    background: transparent !important;
+    color: var(--text-prima) !important; 
+    padding: .5rem;
+    border-radius: 5px;
+}
+
+.prd-category-tag {
+    background: #f9f9f9;
+    display: inline;
+    border: 1px solid var(--border-color);
+    padding: .5rem;
+    border-radius: 5px;
+}
+
+.prd-star.filled {
+    color: rgb(255, 202, 69);
+    margin:0;
+}
+
+.prd-active-color-button, .prd-active-size-button {
+    background: var(--text-link) !important;
+    color: white !important;
+}

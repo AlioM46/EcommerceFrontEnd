@@ -1,0 +1,81 @@
+import { getCookie, deleteCookie } from "../utils/cookies";
+import { refreshToken } from "./AuthService";
+export let accessToken = "";
+
+export function setAccessToken(token) {
+  accessToken = token || null;
+}
+
+export default async function apiFetch(url, options = {}) {
+  // Read token from cookie
+  setAccessToken(getCookie("accessToken"));
+
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const headers = {
+    "Content-Type": "application/json",
+    ...options.headers,
+    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+  };
+
+  try {
+    let res = await fetch(`${baseUrl}${url}`, {
+      ...options,
+      headers,
+      credentials: "include",
+    });
+
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      data = null;
+    }
+
+    console.log(res)
+
+    if (res.status === 401) {
+      const refreshed = await refreshToken();
+
+      if (refreshed) {
+        const newToken = getCookie("accessToken");
+
+        setAccessToken(newToken);
+        headers.Authorization = `Bearer ${newToken}`;
+
+        res = await fetch(`${baseUrl}${url}`, {
+          ...options,
+          headers,
+          credentials: "include",
+        });
+
+        try {
+          data = await res.json();
+        } catch {
+          data = null;
+        }
+      } else {
+        // 🔴 Refresh failed → kill session
+        setAccessToken(null);
+        // Delete cookie
+        deleteCookie("accessToken")
+        
+        // Redirect to login
+        if (typeof window !== "undefined") {
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 2500);
+        }
+
+        return {
+          isSuccess: false,
+          information: "Session expired. Please log in again.",
+        };
+      }
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Network or server error:", error);
+    return { isSuccess: false, information: "Network error" };
+  }
+}

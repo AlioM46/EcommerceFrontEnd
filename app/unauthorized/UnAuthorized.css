@@ -1,0 +1,54 @@
+/* Full screen centered container */
+.unauthorized-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--color-background-primary);
+  padding: 1rem;
+  font-family: "Alexandria", sans-serif;
+  direction: rtl;
+}
+
+/* Card */
+.unauthorized-card {
+  background-color: var(--color-background-thirdly);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Title */
+.unauthorized-title {
+  color: #eb5e28; /* Accent color */
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Message */
+.unauthorized-message {
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Button */
+.unauthorized-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #31572c; 
+  color: white !important;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.unauthorized-button:hover {
+  background-color: #1c3e1a;
+  transform: translateY(-2px);
+}

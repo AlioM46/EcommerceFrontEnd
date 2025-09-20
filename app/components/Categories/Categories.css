@@ -1,0 +1,35 @@
+.categories-wrapper {
+  width: 100%;
+}
+
+.categories-swiper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.swiper-button-next,
+.swiper-button-prev {
+  display: none;
+}
+
+
+
+.swiper-pagination-bullet {
+  background-color: #999;
+  opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #333;
+}
+
+@media (max-width: 640px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 28px;
+    height: 28px;
+  }
+}

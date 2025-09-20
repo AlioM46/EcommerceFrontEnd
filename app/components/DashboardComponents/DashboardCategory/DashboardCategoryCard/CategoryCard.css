@@ -1,0 +1,89 @@
+.category-card {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 250px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.category-image-wrapper {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+}
+
+.category-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-info {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.category-count {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+
+.category-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.category-btn {
+  flex: 1; 
+  width: 100%; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.delete-btn {
+  background-color: #f44336 !important;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f !important;
+}
+
+.edit-btn {
+  background-color: #2196f3 !important;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #1976d2 !important;
+}
+
+.view-btn {
+  background-color: #4caf50 !important;
+  color: white;
+}
+
+.view-btn:hover {
+  background-color: #388e3c !important;
+}

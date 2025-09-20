@@ -1,0 +1,11 @@
+
+
+
+@media (max-width:500px) {
+    .cart-products-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+}

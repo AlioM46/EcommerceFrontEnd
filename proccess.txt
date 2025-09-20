@@ -1,0 +1,53 @@
+project started: 9/07
+
+Tomorrow I should complete all pages. 1 or 2 days -> 40% Done
+🟢 build main page -> 90% Done just some updates
+🟢 build Products page
+🟢 build filter
+🟢 build footer
+🟢 build cart
+🟢 dashboard
+🟢 categories dashboard 
+🟢 Search bar
+🟢 refresh-token & API protection
+
+
+
+then In the next day, I should style the website very well, it may take 2 or 3 days
+
+by 9/13 I should deliver this project
+
+🔴 users dashboard -> Cancelled
+
+🟢 testing all functions and make sure it will not crash me.
+🟢 styling the website from scratch -> 80% -> dashboard needs some
+🟢 Add Categories To Product/{id} product page
+🟢 Add Colors To Product/{id} product page
+🟢 Add Sizes To Product/{id} product page
+🟢 Add Rating To Product/{id} product page
+🟢 let user choose: Color & Size when Add TO CART
+🟢 add general search bar
+🟢 Add SubCategories -> FINISHED -> Hardest Feature of Web I ever Made.....
+🟢  Handle Forms of Categories-subCategories Dashboard
+🟢  Handle Add Product Images
+🟢 Fix Add/update category error -> ParentId = 0 or something else.
+🟢 Highlight the Opened Link
+🟢 Enhance the design of categories sliders
+🟢 Handle Google Drive Images (not displayed yet)
+🟢 Handle Loading.... (Skeletons and Spinner)
+🟢 Handle NotFound
+🟢 Handle Error
+🟢 Handle Destroyed Css While Navigating between pages
+
+by tomorrow: 
+
+
+
+
+
+
+🔴 handle cart product Images
+🔴 handle images slider in /product/[productId]
+🔴 Handle Categories List(style it to make it inside circle)
+🔴 translate (login,signup) pages
+🔴 add Copouns

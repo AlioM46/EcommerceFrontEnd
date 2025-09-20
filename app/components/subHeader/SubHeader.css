@@ -1,0 +1,45 @@
+.subHeader-container {
+  padding: 1rem;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;          /* ✅ no wrapping */
+  overflow: hidden;             /* prevent ugly overflow */
+  color: var(--text-inverse);
+  border-radius: 8px;
+}
+
+.subHeader-container h1 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--text-inverse);
+  flex-shrink: 1;               /* ✅ allow shrinking */
+  overflow: hidden;
+  text-overflow: ellipsis;      /* cut with ... if too long */
+}
+
+.subHeader-container a {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin: 0 0 0 1rem;
+  text-decoration: none;
+  color: var(--text-link) !important;
+  transition: color 0.2s ease-in-out;
+  flex-shrink: 0;               /* link doesn’t shrink */
+}
+
+.subHeader-container a:hover {
+  color: var(--accent-primary);
+}
+
+/* Responsive */
+@media (max-width: 560px) {
+  .subHeader-container h1 {
+    font-size: 1.2rem;          /* smaller font */
+  }
+
+  .subHeader-container a {
+    font-size: 1rem;            /* smaller font */
+  }
+}

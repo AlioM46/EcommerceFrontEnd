@@ -1,0 +1,220 @@
+
+/* Header container */
+header {
+  /* background: var(--bg-primary); */
+  background-color: #F4EAE6 !important;
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem 1.5rem;
+  position: sticky;
+  top: 35px;
+  z-index: 100;
+
+}
+
+header > div:nth-child(1){ 
+  display: flex ;
+  align-items: center ;
+  justify-content: space-between ;
+}
+
+
+/* Logo */
+.logo-image {
+width: 65px;
+height: 90px;
+  object-fit: contain;
+  transition: transform 0.2s ease-in-out;
+}
+
+.logo-image:hover {
+  transform: scale(1.05);
+}
+
+/* Navbar container */
+.navBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: 100%;
+  transition: all 0.3s ease-in-out;
+  gap: 1.25rem;
+        background-color: #F4EAE6 !important;
+
+  
+  
+}
+
+
+
+/* Groups inside nav */
+.navBar div {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-basis: 100%;
+  gap: 12px !important;
+}
+
+.navbar-links-container {
+  flex: 0 .7 200px;
+justify-content: center !important;
+}
+
+/* Links */
+.nav-link {
+  /* color: var(--text-primary) !important ; */
+  color: #AA7474;
+  transition: all 0.2s ease-in-out;
+  font-weight: bold;
+  font-size: .90rem;
+
+}
+
+
+.login-link, .signup-link {
+  color:var(--color-text-thirdly)!important ;
+}
+
+
+/* Sign Up button (accented) */
+
+
+
+
+/* Cart */
+.cart-icon {
+  position: relative;
+  transition: color 0.2s ease-in-out, transform 0.2s;
+    color: var(--color-text-secondary) !important;
+
+}
+
+.cart-icon:hover {
+  color: var(--color-primary);
+  transform: scale(1.1);
+}
+
+/* Hamburger menu toggle */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: color 0.2s ease-in-out;
+}
+
+.menu-toggle:hover {
+  color: var(--color-primary);
+}
+
+
+@media (max-width:1200px) {
+    .header-searchBar {
+    font-size: 13px;
+
+  }
+
+
+}
+
+/* --- Responsive --- */
+@media (max-width: 1020px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .navBar {
+    position: absolute;
+    top: 80px;
+    right: 0;
+  /* background: var(--accent-secondary) !important; */
+    border: 1px solid ;
+    
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    gap: 1rem;
+    display: none; /* hidden by default */
+    border-top: 2px solid rgba(0, 0, 0, 0.05);
+color: var(--text-primary);
+    /* Slide down animation */
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .navBar.active {
+    display: flex; /* show when active */
+    opacity: 1;
+    transform: translateY(30);
+
+  }
+
+  .navBar div {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .header-searchBar {
+    margin: 0;
+  }
+
+}
+
+
+
+
+.header-searchBar:focus-within {
+  box-shadow: 0 0 0 2px rgba(0,112,243,0.2);
+}
+
+ 
+
+
+.header-search-container {
+  max-width: 364px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin: 0 auto; 
+}
+.header-searchBar {
+  width: 100% !important;
+  padding: 0.5rem .6rem;
+  height: 45px;
+  box-sizing: border-box;
+  background:white;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: all 0.3s ease-in-out;
+}
+
+
+
+
+.search-button {
+      display: flex;
+    justify-content: center;
+height: 43px;
+  border-radius: 8px;
+
+ 
+position: absolute;
+  right: 0;
+}
+
+.active-link {
+  color: var(--text-link) !important;
+  font-weight: bold;
+  
+
+}

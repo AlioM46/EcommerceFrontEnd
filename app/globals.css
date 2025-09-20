@@ -1,42 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap');
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ----------------------- Backgrounds ----------------------- */
+  --bg-primary: #F0E8E2;    /* Sections / cards background */
+  --bg-secondary: #FAF6F1;      /* Page background - light warm beige */
+  --bg-tertiary: #FFFFFF;     /* Product cards / high contrast */
+  --bg-dark: #2E2A27;         /* Header / footer dark brown */
+  --bg-main: #5C5045;         /* Muted text background or overlays */
+
+  /* ------------------------ Text Colors ----------------------- */
+  --text-primary: #2E2A27;    /* Main text - dark brown for readability */
+  --text-secondary: #AA7474;  /* Muted text / subtitles */
+  --text-inverse: #FAF6F1;    /* Text on dark backgrounds (header/footer) */
+  --text-link: #668686;       /* Olive green links for subtle contrast */
+  --text-accent: #8B5E3C;     /* Brown accent text (for small highlights) */
+
+  /* ------------------------- Accents ------------------------- */
+  --accent-primary: #8B5E3C;   /* Buttons / CTAs brown */
+  --accent-secondary: #C19A6B; /* Lighter brown hover / secondary buttons */
+  --accent-danger: #D9534F;    /* Red for errors / sale labels */
+  --accent-success: #4CAF50;   /* Green for success / stock */
+
+  /* ----------------------- Borders & Shadows ----------------- */
+  --border-color: #E0D6CC;          /* Light warm border */
+  --shadow-color: rgba(46, 42, 39, 0.1); /* Soft shadow for cards */
+
+  /* ---------------------- Buttons / Hover ------------------- */
+  --btn-text-primary: var(--text-inverse);     /* White on brown button */
+  --btn-hover-bg: var(--accent-secondary);    /* Slightly lighter brown hover */
+  --btn-border-radius: 6px;                    /* Rounded buttons */
+
+  /* ---------------------- Cards / Sections ----------------- */
+  --card-bg: var(--bg-tertiary);  /* Product card background */
+  --card-shadow: var(--shadow-color);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
-html,
+/* Base styles */
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+  background-color: var(--bg-secondary) !important;
+  font-family: "Alexandria", sans-serif !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  color: var(--text-primary) !important;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  color: var(--text-link) !important;
+  text-decoration: none !important;
+  color: #AA7474 !important;
+
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+button,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-secondary) !important;
+  color: #AA7474 !important;
+}
+
+button a, button > * {
+  color: white !important;
+}
+
+
+/* Buttons */
+button {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  
+}
+button:hover {
+  background: var(--accent-secondary);
+}
+
+/* Container system */
+.container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 1rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Responsive max-widths */
+@media (min-width: 576px) {
+  .container { max-width: 540px; }
+}
+@media (min-width: 768px) {
+  .container { max-width: 720px; }
+}
+@media (min-width: 992px) {
+  .container { max-width: 960px; }
+}
+@media (min-width: 1200px) {
+  .container { max-width: 1140px; }
+}
+@media (min-width: 1400px) {
+  .container { max-width: 1320px; }
 }

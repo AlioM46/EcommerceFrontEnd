@@ -1,0 +1,30 @@
+button {
+  background-color: var(--accent-primary) !important; 
+  color: var(--text-inverse) !important;
+  color: white !important;
+  background-color: #AA7474 !important;
+
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px !important;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out, background-color 0.2s ease-in-out !important;
+}
+
+button:hover {
+  transform: scale(1.02); /* slightly more noticeable hover */
+  background-color: var(--accent-secondary); /* lighter brown on hover */
+}
+
+button:active {
+  transform: scale(0.96); /* stronger press effect */
+  background-color: var(--accent-primary); /* keep brand color on press */
+}
+
+button:disabled {
+  background-color: var(--border-color) !important; /* soft beige/neutral */
+  color: var(--text-secondary) !important;
+  cursor: not-allowed;
+  transform: none;
+}

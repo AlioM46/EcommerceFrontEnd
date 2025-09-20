@@ -1,0 +1,61 @@
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* form smaller, products larger */
+  gap: 2rem;
+  margin: 2rem 0;
+  min-height: 75vh;
+}
+
+
+.dashboard-container .dashboard-content, .dashboard-container aside {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+
+.dashboard-container aside div {
+    display: flex;
+    justify-content:center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+}
+.dashboard-container aside div button {
+min-width: 100%;
+}
+
+@media (max-width: 1050px) {
+  .dashboard-container {
+    grid-template-columns: 1fr; /* stack */
+  }
+
+
+}
+
+
+@media(max-width: 500px) {
+  .dashboard-container {
+    display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+margin: 2rem 1rem;
+  }
+  .cart .form, .cart .products {
+width: 100%;
+  }
+}
+
+.main-dashboard-buttons-container {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.main-dashboard-buttons-container >  a,
+.main-dashboard-buttons-container >button {
+  color:  white !important;
+  flex: 1 1 300px;
+  
+}

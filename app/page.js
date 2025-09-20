@@ -1,95 +1,48 @@
+
 import Image from "next/image";
-import styles from "./page.module.css";
+import "./Home.css";
+import Section from "./components/Section/Section";
+import PromoBanner from "./components/PromotionBanner/PromotionBanner";
 
-export default function Home() {
+
+export const metadata = {
+  title: "الصفحة الرئيسية - Trend Idleb",
+  description: "تصفح أحدث المنتجات والعروض في الصفحة الرئيسية لموقعنا.",
+  openGraph: {
+    title: "الصفحة الرئيسية - Trend Idleb",
+    description: "تصفح أحدث المنتجات والعروض في الصفحة الرئيسية لموقعنا.",
+    url: "https://example.com",
+    images: ["/logo.svg"],
+  },
+};
+
+export default async function Home() {
+  
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div  className ="main-page  ">
+     
+    <div className="thumbnail-container "> 
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+{/* <div className="thumbnail-text "> */}
+  {/* <h1>مرحبا بكم في متجرنا</h1>
+  <p>مرحبا بكم في متجرنا مرحبا بكم في متجرنا مرحبا بكم في متجرنا مرحبا بكم في متجرنا مرحبا بكم في متجرنا مرحبا بكم في متجرنا مرحبا بكم في متجرنا مرحبا بكم في متجرنا مرحبا بكم في متجرنا </p> */}
+{/* </div> */}
+
+      {/* h-64 = height, change as needed */}
+
+<div className="img-parent">
+{/* <img   src="https://pub-7195234143b04f4d9e8c25ddaf35d181.r2.dev/5c7b5316-fefe-49db-bda5-3f4fadd8842c.png" alt="Thumbnail" className="banner-img" /> */}
+<Image  fill src="/bnr3.jpg" alt="Thumbnail" className="banner-img" />
+
+</div>
+
+
     </div>
-  );
+
+<Section category ={"فساتين"} headerText = "القسم المميز" showLink={true} linkText = "عرض المزيد" />
+<Section category = {"رجال"} headerText = "كل مايخص الرجال" showLink={true} linkText = "عرض المزيد"/>
+    </div>
+  );  
 }
+
