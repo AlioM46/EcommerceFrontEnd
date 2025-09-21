@@ -5,21 +5,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping, faBars, faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping, faBars, faTimes, faSearch, faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "@/app/context/AuthContext";
 import Button from "../Button/Button";
 import "./Header.css";
 import "../../globals.css";
 
+
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { isAuthenticated, logout, isAdmin, isOwner } = useAuth();
+  const { isAuthenticated, logout, isAdmin, isOwner, cartLength } = useAuth();
   const router = useRouter();
   const pathname = usePathname(); // current URL
 
-  console.log(pathname)
+  console.log("CCC",cartLength)
 
   const navLinks = [
     { href: "/", label: "الصفحة الرئيسية" },
@@ -41,6 +43,7 @@ export default function Header() {
     <header>
       <div className="container">
         {/* Logo */}
+
         <Link href="/" className="logo">
           <Image
             src="/logo.svg"
@@ -52,14 +55,38 @@ export default function Header() {
         </Link>
 
         {/* Hamburger Icon */}
-        <button
+
+<div style={{display:"flex", justifyContent:"center", alignItems:"center", gap:".90rem"} } className="container-bars">
+<Link href={"/login"}>
+  <FontAwesomeIcon icon={faCircleUser} size="xl"/>
+
+  
+</Link>
+
+            <Link href={"/cart"} className="special-cart">
+            <FontAwesomeIcon icon={faCartShopping} className="cart-icon" size="lg"/>
+
+<span>{cartLength}</span>
+            </Link>
+
+
+
+<Link href={"/products"}>
+<FontAwesomeIcon icon={faSearch} size="xl"/>
+</Link>
+          <button
           className="menu-toggle"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} size="lg" />
         </button>
 
+</div>
+
+        
+
         {/* Nav Bar */}
+
         <nav className={`navBar ${menuOpen ? "active" : ""}`}>
           <div className="navbar-links-container">
             {navLinks.map((link) => {
@@ -79,7 +106,7 @@ export default function Header() {
           </div>
 
           {/* Search */}
-          <div className="header-search-container">
+          <div className="header-search-container nav-active-disable">
             <input
               className="header-searchBar"
               type="text"
@@ -88,13 +115,20 @@ export default function Header() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-            <button className="search-button" onClick={handleSearch}>
+            <button className="search-button "  onClick={handleSearch}>
               <FontAwesomeIcon icon={faSearch} size="sm" />
             </button>
           </div>
 
           {/* Auth Buttons & Cart */}
           <div>
+
+            <Link href={"/cart"} className="special-cart special-link ">
+            <FontAwesomeIcon icon={faCartShopping} className="cart-icon" size="lg"/>
+
+<span>{cartLength}</span>
+            </Link>
+
             {isAuthenticated ? (
               <Button
                 onClick={() => {
@@ -109,7 +143,7 @@ export default function Header() {
                 <Button>
                   <Link
                     href="/login"
-                    className="login-link"
+                    className="login-link nav-active-disable"
                     onClick={() => setMenuOpen(false)}
                   >
                     تسجيل الدخول
@@ -127,13 +161,7 @@ export default function Header() {
                 </Button>
               </>
             )}
-            <Link
-              href="/cart"
-              className="cart-icon"
-              onClick={() => setMenuOpen(false)}
-            >
-              <FontAwesomeIcon icon={faCartShopping} size="lg" />
-            </Link>
+
           </div>
         </nav>
       </div>

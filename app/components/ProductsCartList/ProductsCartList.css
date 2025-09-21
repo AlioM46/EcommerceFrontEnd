@@ -1,11 +1,17 @@
 
 
-
-@media (max-width:500px) {
-    .cart-products-list {
+    .cart-products-container{
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
-}
-}
+margin: 0 1rem;
+    }
+    
+    @media(max-width:500px) {
+        
+    .cart-products-container{
+    align-items: center;
+
+    }
+
+    }

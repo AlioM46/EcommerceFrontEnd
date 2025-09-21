@@ -28,18 +28,22 @@ function handleRemove(prod) {
   return (
     <div className="cart-products-list" style={{maxWidth:760, margin:"20px auto"}}>
       <h1 style={{textAlign:"right", fontSize:28, marginBottom:18}}>سلة التسوق</h1>
+
+      <div className="cart-products-container">
+
       {cartItems.length === 0 ? (
         <p style={{textAlign:"center", color:"#666"}}>السلة فارغة</p>
       ) : (
         cartItems.map((p, i) => (
           <ProductCard
-            key={i}
-            product={p}
-            onChangeQty={handleChangeQty}
-            onRemove={handleRemove}
+          key={i}
+          product={p}
+          onChangeQty={handleChangeQty}
+          onRemove={handleRemove}
           />
         ))
       )}
+      </div>
     </div>
   );
 }

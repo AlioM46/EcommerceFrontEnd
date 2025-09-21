@@ -7,7 +7,7 @@ import { useAuth } from "@/app/context/AuthContext";
 export default function CheckoutForm() {
   const { cartItems } = useAuth();
 
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState("إدلب");
   const [cities, setCities] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -62,8 +62,10 @@ export default function CheckoutForm() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+
 const handleOrder = () => {
-  if (!validate()) return;
+  // if (!validate()) return;
 
   const order = {
     ...formData,
@@ -190,7 +192,7 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
 
         <div className="form-group">
           <label>اختر المدينة</label>
-          <select value={city} onChange={(e) => setCity(e.target.value)}>
+          <select value={city } onChange={(e) => setCity(e.target.value)}>
             <option value="">اختر المدينة</option>
             {cities.map((c, i) => (
               <option key={i} value={c}>{c}</option>

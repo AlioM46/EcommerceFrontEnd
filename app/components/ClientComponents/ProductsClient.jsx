@@ -19,11 +19,7 @@ export default function ProductsClient() {
 
   const { setLoading } = useLoading();
 
-  useEffect(() => {
-    if (searchQuery) {
-      console.log("Searching for:", searchQuery);
-    }
-  }, [searchQuery]);
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -32,7 +28,7 @@ export default function ProductsClient() {
         const top10Categories = await apiFetch("/categories/top");
         setCategories(top10Categories);
       } catch (err) {
-        console.error("Error fetching categories:", err);
+        console.error("--Error fetching categories:", err);
       } finally {
         setLoading(false);
       }

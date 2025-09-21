@@ -1,11 +1,10 @@
-/* components/ProductCard.module.css */
 :root{
   --bg:#fff8e6;
   --card-border:#0b0b0b;
   --muted:#6b6b6b;
   --green:#19A34A;
 }
-.card {
+.pc-card {
   direction: rtl;
   display: flex;
   gap: 14px;
@@ -20,7 +19,7 @@
 }
 
 /* Trash icon on left */
-.trashBtn {
+.pc-trashBtn {
   position: absolute;
   left: 14px;
   top: 14px;
@@ -30,11 +29,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px;
+  padding: .65rem .90rem;
+  transition: .2s !important;
+}
+.pc-trashBtn:hover {
+  color: red !important;
 }
 
 /* Product image */
-.imageWrap {
+.pc-imageWrap {
   width: 110px;
   height: 110px;
   flex-shrink: 0;
@@ -46,19 +49,19 @@
   justify-content: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
-.image {
+.pc-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 /* Main info */
-.product-info {
+.pc-product-info {
     text-align: right;
     flex: 1;
     padding-right: 6px;
 }
-.title {
+.pc-title {
   margin: 0 0 6px 0;
   font-size: 17px;
   font-weight: 700;
@@ -66,13 +69,13 @@
 }
 
 /* Price row */
-.priceRow {
+.pc-priceRow {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 8px;
 }
-.badge {
+.pc-badge {
   background: var(--green);
   color: #fff;
   font-weight: 700;
@@ -82,24 +85,24 @@
 }
 
 /* Price area */
-.priceArea {
+.pc-priceArea {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.currentPrice {
+.pc-currentPrice {
   font-weight: 800;
   font-size: 15px;
   color: var(--color-text-primary);
 }
-.oldPrice {
+.pc-oldPrice {
   text-decoration: line-through;
   color: var(--color-text-secondary);
   font-size: 13px;
 }
 
 /* Delivery info */
-.delivery {
+.pc-delivery {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -109,12 +112,12 @@
 }
 
 /* Quantity controls */
-.controls {
+.pc-controls {
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
-.qty {
+.pc-qty {
   display: inline-flex;
   align-items: center;
   border: 2px solid rgba(0, 0, 0, 0.4);
@@ -122,7 +125,7 @@
   overflow: hidden;
   background: transparent;
 }
-.qty button {
+.pc-qty button {
   width: 36px;
   height: 36px;
   border: none;
@@ -134,7 +137,7 @@
   justify-content: center;
   padding: 0;
 }
-.qtyNumber {
+.pc-qtyNumber {
   min-width: 44px;
   text-align: center;
   font-weight: 700;
@@ -145,81 +148,86 @@
 
 /* --- Responsive styles --- */
 @media (max-width: 500px) {
-  .card {
-    width: 300px;
-    flex-direction: column; /* stack image + info */
+  .pc-card {
     align-items: flex-start;
     padding: 12px;
+width: 100%;
 
+   
   }
 
-  .trashBtn {
+
+
+  .pc-trashBtn {
     left: auto;
-    right: 12px; /* keep it in the corner */
-    top: 12px;
+    right: 18px; /* keep it in the corner */
+    top: 18px;
+
   }
 
-  .imageWrap {
+  .pc-imageWrap {
     width: 100%;
+    max-width: 150px;
     height: auto;
     max-height: 200px;
     border-radius: 8px;
+
   }
-  .image {
+  .pc-image {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
 
-  .product-info {
+  .pc-product-info {
     padding-right: 0;
     width: 100%;
     text-align: right;
   }
 
-  .title {
+  .pc-title {
     font-size: 15px;
     margin-top: 10px;
   }
 
-  .priceRow {
+  .pc-priceRow {
     flex-wrap: wrap;
     gap: 6px;
   }
 
-  .badge {
+  .pc-badge {
     font-size: 11px;
     padding: 3px 6px;
   }
 
-  .priceArea {
+  .pc-priceArea {
     gap: 6px;
   }
-  .currentPrice {
+  .pc-currentPrice {
     font-size: 14px;
   }
-  .oldPrice {
+  .pc-oldPrice {
     font-size: 12px;
   }
 
-  .delivery {
+  .pc-delivery {
     font-size: 12px;
     margin-bottom: 8px;
   }
 
-  .qty button {
+  .pc-qty button {
     width: 30px;
     height: 30px;
     font-size: 18px;
   }
-  .qtyNumber {
+  .pc-qtyNumber {
     min-width: 36px;
     font-size: 14px;
   }
 }
 
 
-.product-size, .product-color {
+.pc-product-size, .pc-product-color {
   color:black !important;
   /* color: var(--color-primary) !important; */
 }

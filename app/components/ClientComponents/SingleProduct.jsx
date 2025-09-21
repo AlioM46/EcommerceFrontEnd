@@ -25,6 +25,8 @@ export default function Product() {
   const productImagesUrls = product.productImagesUrl || [];
 
 
+
+
   const { addToCart } = useAuth();
   const { setLoading, loading } = useLoading();
 
@@ -58,6 +60,37 @@ export default function Product() {
     }
     fetchProduct();
   }, [productId]);
+
+
+  const orderByWhatsapp = () => {
+
+
+      
+    const phoneNumber = "352681537670"; // your WhatsApp number
+var message = "";
+  const price = product.discountPrice && product.discountPrice > 0 ?product.discountPrice : product.price;
+  const colorText = chosenColor? `\n\nاللون: ${chosenColor}\n` : "";
+  const sizeText = chosenSize? `المقاس: ${chosenSize}\n` : "";
+
+  if (product.sku != "" && product.sku != null) {
+  message += `SKU Code: ${product?.sku}\n`
+
+  }
+  message += `$${product.name} (معرف: ${product.id})${colorText}${sizeText} {1} × ${price.toFixed(2)}\n`;
+  message += `رابط المنتج:\t${process.env.NEXT_PUBLIC_FRONT_END_URL}/products/${product.id}\n`;
+const dateObj = new Date(); // correct
+const date = dateObj.toLocaleDateString("ar-SY", { year: "numeric", month: "2-digit", day: "2-digit" });
+const time = dateObj.toLocaleTimeString("ar-SY", { hour: "2-digit", minute: "2-digit" });
+
+  message += `✅ الإجمالي: *${price.toFixed(2)}$*\n`;
+message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
+
+  // ✅ Open WhatsApp
+  const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+
+
+  }
 
 
   let priceJsx;
@@ -101,26 +134,13 @@ export default function Product() {
       {/* LEFT SIDE */}
       <div className="prd-product-info">
         <h1 className="prd-product-name">{product.name}</h1>
+        <div className="prd-product-description">
+          <h2>وصف المنتج:</h2>
+          <p>{product.description || "لايوجد وصف للمنتج"}</p>
+        </div>
 
-        {product.brand && <h3 className="prd-product-brand">العلامة التجارية: {product.brand}</h3>}
 
-        {product.categories?.length > 0 && (
-          <div className="prd-product-categories">
-            <strong>الفئة:</strong>{" "}
-            {product.categories.map((cat, i) => (
-              <span key={i} className="prd-category-tag">{cat}</span>
-            ))}
-          </div>
-        )}
-
-        {product.inStock > 0 ?  
-          <h2 className="prd-product-inStock">متوفر الان</h2> :
-          <h2 className="prd-product-outOfStock">نفذ المخزون</h2> 
-        }
-
-        <div className="prd-product-price">{priceJsx}</div>
-
-        {product.productColors?.length > 0 && (
+{product.productColors?.length > 0 && (
           <div className="prd-product-colors">
             <strong>الألوان:</strong>{" "}
             {product.productColors.map((color, i) => (
@@ -134,8 +154,7 @@ export default function Product() {
             ))}
           </div>
         )}
-
-        {product.productSizes?.length > 0 && (
+                {product.productSizes?.length > 0 && (
           <div className="prd-product-sizes">
             <strong>المقاسات:</strong>{" "}
             {product.productSizes.map((size, i) => (
@@ -149,6 +168,29 @@ export default function Product() {
             ))}
           </div>
         )}
+                <div className="prd-product-price">{priceJsx}</div>
+
+
+
+        {product.inStock > 0 ?  
+          <h2 className="prd-product-inStock">متوفر الان</h2> :
+          <h2 className="prd-product-outOfStock">نفذ المخزون</h2> 
+        }
+
+        {product.brand && <h3 className="prd-product-brand">العلامة التجارية: {product.brand}</h3>}
+
+        {product.categories?.length > 0 && (
+          <div className="prd-product-categories">
+            <strong>الفئة:</strong>{" "}
+            {product.categories.map((cat, i) => (
+              <span key={i} className="prd-category-tag">{cat}</span>
+            ))}
+          </div>
+        )}
+
+
+        
+
 
         <div className="prd-product-rating">
           <strong>التقييم:</strong>{" "}
@@ -166,7 +208,7 @@ export default function Product() {
             اضافة الى السلة 
           </Button>
 
-          <Button>
+          <Button onClick={() => orderByWhatsapp()}>
             <FontAwesomeIcon icon={faMessage} color="green" size="md" /> 
             اشتر الان عبر واتساب
           </Button>
@@ -174,10 +216,7 @@ export default function Product() {
 
         <hr/>
 
-        <div className="prd-product-description">
-          <h2>وصف المنتج:</h2>
-          <p>{product.description || "لايوجد وصف للمنتج"}</p>
-        </div>
+
       </div>
 
       {/* RIGHT SIDE */}

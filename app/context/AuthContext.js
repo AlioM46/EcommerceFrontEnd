@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [cartItems, setCartItems] = useState([]);    
   const [toast, setToast] = useState({ show: false, message: "" , error: false });
+  const [cartLength, setCartLength]  = useState(0)
 
   const router = useRouter();
 
@@ -42,6 +43,9 @@ export const AuthProvider = ({ children }) => {
 
     window.localStorage.setItem("cart", JSON.stringify(cart));
     setCartItems(cart);
+    setCartLength(cart.length || 0)
+
+
 
     setToast({ show: true, message: `${product.name} تم إضافته إلى السلة` });
   };
@@ -55,7 +59,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Initialize cart
     const cartItemsList = JSON.parse(window.localStorage.getItem("cart") || "[]");
-    if (cartItemsList.length > 0) setCartItems(cartItemsList);
+    if (cartItemsList.length > 0) {
+      setCartItems(cartItemsList);
+ setCartLength(cartItemsList.length || 0)
+    }
+      
+   
     else window.localStorage.setItem("cart", JSON.stringify([]));
 
     // ===== Initialize auth from cookie =====
@@ -135,6 +144,7 @@ export const AuthProvider = ({ children }) => {
         setCartItems,
         addToCart,
         setToast,
+        cartLength,
         toast,
         cartItems,
         user,
