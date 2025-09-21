@@ -143,7 +143,7 @@ export default function Header() {
                 <Button>
                   <Link
                     href="/login"
-                    className="login-link nav-active-disable"
+                    className="login-link"
                     onClick={() => setMenuOpen(false)}
                   >
                     تسجيل الدخول
