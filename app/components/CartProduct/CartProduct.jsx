@@ -1,12 +1,14 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import "./CartProduct.css"
+import { useRouter } from "next/navigation";
 import { getImageSrc } from "@/app/utils/handleUrls";
 
 export default function ProductCard({ product, onChangeQty = () => {}, onRemove = () => {} }) {
   const { name, price, productImagesUrl, deliveryText, discountPrice, qty = 1 , color , size} = product;
 
   const [resolvedImage,  setResolvedImage] = useState()
+  const router = useRouter();
 
   let isThereDiscount = false;
   let discountPercentage = 0;
@@ -14,6 +16,18 @@ export default function ProductCard({ product, onChangeQty = () => {}, onRemove 
   if (discountPrice > 0) {
     isThereDiscount = true;
     discountPercentage = Math.round(((price -discountPrice) /price) * 100);
+  }
+
+
+  
+  const SendToProductPage = () => {
+
+    const productUrl = `/products/${product.id}`
+
+    if (product.id != 0 || product.id != "" || product.id != null) {
+    router.push(productUrl)
+    }
+    
   }
 
   useEffect(() => {
@@ -41,6 +55,7 @@ export default function ProductCard({ product, onChangeQty = () => {}, onRemove 
 
       <div className="pc-imageWrap">
         <img
+        onClick={() => SendToProductPage()}
           src={resolvedImage}
           alt={name}
           className="pc-image"
@@ -48,7 +63,7 @@ export default function ProductCard({ product, onChangeQty = () => {}, onRemove 
       </div>
 
       <div className="pc-product-info">
-        <h3 className="pc-title">{name}</h3>
+        <h3 onClick={() => SendToProductPage()} className="pc-title">{name}</h3>
 
         {color ? (
           <p className="pc-product-color">

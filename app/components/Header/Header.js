@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,7 +21,20 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname(); // current URL
 
-  console.log("CCC",cartLength)
+  
+  useEffect(() => {
+  const handleClickAnywhere = () => {
+    if (menuOpen) setMenuOpen(false);
+  };
+
+  document.addEventListener("click", handleClickAnywhere);
+
+  return () => {
+    document.removeEventListener("click", handleClickAnywhere);
+  };
+}, [menuOpen]);
+
+
 
   const navLinks = [
     { href: "/", label: "الصفحة الرئيسية" },

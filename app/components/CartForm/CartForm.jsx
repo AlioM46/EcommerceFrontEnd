@@ -89,7 +89,7 @@ const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONT_END_URL;
 
 
 const handleWhatsappRedirection = () => {
-  const phoneNumber = "352681537670"; // your WhatsApp number
+  const phoneNumber = "963947739774"; // your WhatsApp number
   const order = JSON.parse(localStorage.getItem("checkoutOrder"));
 
   if (!order) return;

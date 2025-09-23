@@ -12,6 +12,20 @@ export default function DashboardProduct({ product, fetchProducts, currentPage }
   const [isProductActive, setIsProductActive] = useState(isActive);
   const [imgSrc, setImgSrc] = useState("/ProductImage-Temp.jpg"); // default placeholder
   const { setToast } = useAuth();
+  const [hasSheinUrl ,setHasSheinUrl ] =useState(false);
+
+
+
+  useEffect(() => {
+
+    if (product?.sheinUrl?.length >0) {
+      setHasSheinUrl(true)
+    } else {
+      setHasSheinUrl(false)
+    }
+
+
+  },[product])
 
   // Resolve image URL asynchronously
   useEffect(() => {
@@ -42,13 +56,17 @@ export default function DashboardProduct({ product, fetchProducts, currentPage }
 
   const updatePrice = async () => {
     try {
-      const res = await apiFetch(`/Product/upadte-shein-price?Sku=${product.sku}`);
+      if (!hasSheinUrl) {
+              setToast({ show: true, error :true,message: ` لايمكن تحديث هذا المنتج’, يجب ان يكون مضافاً على النظام الجديد` });
+      }
+
+      const res = await apiFetch(`/Product/upadte-shein-price?productId=${product.id}&url=${product.sheinUrl}`);
       if (res.isSuccess) {
         setToast({ show: true, message: "تم تحديث سعر المنتج بنجاح!" });
         fetchProducts(currentPage);
       }
     } catch (err) {
-      setToast({ show: true, message: `${err?.message}: فشلت عملية تحديث المنتج` });
+      setToast({ show: true, error :true,message: `${err?.message}: فشلت عملية تحديث المنتج` });
     }
   };
 
@@ -103,7 +121,7 @@ export default function DashboardProduct({ product, fetchProducts, currentPage }
           </div>
         </div>
 
-        {product?.sku?.length > 0 && <p>SKU: {product.sku}</p>}
+        {product?.sku?.length > 0 && <p>Shein Code - SKU: {product.sku}</p>}
 
         <div className="dashboard-buttons-container">
           {product?.sku?.length > 0 && (
@@ -111,6 +129,7 @@ export default function DashboardProduct({ product, fetchProducts, currentPage }
               className="dashboard-updatePrice"
               aria-label="تحديث سعر المنتج من شي ان"
               onClick={updatePrice}
+              disabled={!hasSheinUrl}
             >
               تحديث سعر المنتج من شي ان
             </button>

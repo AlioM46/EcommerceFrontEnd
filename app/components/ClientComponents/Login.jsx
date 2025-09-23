@@ -1,9 +1,9 @@
 "use client";
 import { useAuth } from "../../context/AuthContext";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 import { useLoading } from "../../context/LoadingContext";
-import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,63 +11,52 @@ export default function Login() {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
-  const {login } = useAuth();
+  const { login } = useAuth();
+  const { setLoading } = useLoading();
 
-
-  const {setLoading} = useLoading();
-
-
-
-// Automatically hide success message after 3 seconds
-useEffect(() => {
-  if (submitted) {
-    const timer = setTimeout(() => setSubmitted(false), 3000);
-    return () => clearTimeout(timer); // cleanup if component unmounts early
-  }
-}, [submitted]);
-
-
-
+  // إخفاء رسالة النجاح تلقائياً بعد 3 ثواني
+  useEffect(() => {
+    if (submitted) {
+      const timer = setTimeout(() => setSubmitted(false), 3000);
+      return () => clearTimeout(timer); // تنظيف المؤقت عند الخروج من الصفحة
+    }
+  }, [submitted]);
 
   const validate = () => {
     const newErrors = {};
 
-    // Email validation
+    // التحقق من البريد الإلكتروني
     if (!email.trim()) {
-      newErrors.email = "Email is required.";
+      newErrors.email = "البريد الإلكتروني مطلوب.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Please enter a valid email.";
+      newErrors.email = "الرجاء إدخال بريد إلكتروني صحيح.";
     }
 
-    // Password validation
+    // التحقق من كلمة السر
     if (!password.trim()) {
-      newErrors.password = "Password is required.";
+      newErrors.password = "كلمة المرور مطلوبة.";
     } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters.";
+      newErrors.password = "يجب أن تكون كلمة المرور 6 أحرف على الأقل.";
     }
 
     return newErrors;
   };
 
-  const  handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
 
     if (Object.keys(validationErrors).length === 0) {
-      setLoading(true)
-      const res = await login(email,password);
-      setLoading(false)
-      
-if (res?.isSuccess){
-      setSubmitted(true);
-      setErrors({});
-} else {
-    setErrors({form: res?.information || "Login failed"});
-}
+      setLoading(true);
+      const res = await login(email, password);
+      setLoading(false);
 
-
-
-      // TODO: call your API or AuthContext login here
+      if (res?.isSuccess) {
+        setSubmitted(true);
+        setErrors({});
+      } else {
+        setErrors({ form: "البريد او كلمة المرور غير صحيحة" });
+      }
     } else {
       setErrors(validationErrors);
       setSubmitted(false);
@@ -76,40 +65,46 @@ if (res?.isSuccess){
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
+      <h2>تسجيل الدخول</h2>
 
       <form onSubmit={handleSubmit} noValidate>
-          {errors.form && <p className=" form-error">{errors.form}</p>}
+        {errors.form && <p className="form-error">{errors.form}</p>}
 
-        
-        {/* Email */}
+        {/* البريد الإلكتروني */}
         <div className="form-group">
-          <label>Email</label>
+          <label>البريد الإلكتروني</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
+            placeholder="أدخل بريدك الإلكتروني"
           />
           {errors.email && <p className="error">{errors.email}</p>}
         </div>
 
-        {/* Password */}
+        {/* كلمة المرور */}
         <div className="form-group">
-          <label>Password</label>
+          <label>كلمة المرور</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
+            placeholder="أدخل كلمة المرور"
           />
           {errors.password && <p className="error">{errors.password}</p>}
         </div>
 
-        <button type="submit">Login</button>
+        <button type="submit">تسجيل الدخول</button>
       </form>
 
-      {submitted && <p className="success">✅ Login successful!</p>}
+      <Link
+        style={{ marginTop: "1rem", fontWeight: "500", display: "block" }}
+        href={"/sign-up"}
+      >
+        هل تريد إنشاء حساب؟
+      </Link>
+
+      {submitted && <p className="success">✅ تم تسجيل الدخول بنجاح!</p>}
     </div>
   );
 }

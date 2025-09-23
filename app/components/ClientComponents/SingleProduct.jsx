@@ -66,7 +66,7 @@ export default function Product() {
 
 
       
-    const phoneNumber = "352681537670"; // your WhatsApp number
+    const phoneNumber = "963947739774";
 var message = "";
   const price = product.discountPrice && product.discountPrice > 0 ?product.discountPrice : product.price;
   const colorText = chosenColor? `\n\nاللون: ${chosenColor}\n` : "";

@@ -8,18 +8,17 @@ import "./AddSheinProduct.css"; // import the CSS file
 import { useLoading } from "@/app/context/LoadingContext";
 
 export default function AddSheinProduct() {
-    const [countryCode, setCountryCode] = useState("ar");
-    const [skuCode, setSKUCode] = useState("");
+    const [countryCode, setCountryCode] = useState("SA");
+    const [sheinUrl, setSheinUrl] = useState("");
     const { setToast } = useAuth();
 const {setLoading , loading} = useLoading();
 
     const isValid = () => {
         if (!countryCode?.trim()) return false;
-        if (!skuCode?.trim()) return false;
+        if (!sheinUrl?.trim()) return false;
         return true;
     };
 
-    console.log(loading)
 
     const handleAddProduct = async () => {
         if (!isValid()) {
@@ -30,12 +29,16 @@ const {setLoading , loading} = useLoading();
         setLoading(true); // start loading
 
         try {
-            const res = await apiFetch(`/SheinProducts/${skuCode}/${countryCode}`, { method: "POST" });
+const res = await apiFetch(
+    `/SheinProducts/?url=${encodeURIComponent(sheinUrl)}&country=${countryCode.toUpperCase()}&currency=USD&language=ar&max_items_count=1&max_items_per_url=0&include_size_chart=false`,
+    { method: "POST" }
+);
 
-            if (res?.isSuccess) {
+
+            if (res.isSuccess) {
                 setToast({ show: true, message: "تم اضافة المنتج من شي ان بنجاح" });
-                setCountryCode("ar"); // reset fields if needed
-                setSKUCode("");
+                setCountryCode("SA"); 
+                setSheinUrl("");
             } else {
                 setToast({
                     show: true,
@@ -66,12 +69,12 @@ const {setLoading , loading} = useLoading();
             </div>
 
             <div className="shein-input-group">
-                <label>معرف المنتج (SKU) *</label>
+                <label>رابط المنتج (عن طريق المتصفح او الـلابتوب) *</label>
                 <input
                     type="text"
                     placeholder="أدخل معرف المنتج"
-                    value={skuCode}
-                    onChange={(e) => setSKUCode(e.target.value)}
+                    value={sheinUrl}
+                    onChange={(e) => setSheinUrl(e.target.value)}
                     disabled={loading}
                 />
             </div>

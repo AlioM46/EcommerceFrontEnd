@@ -31,7 +31,6 @@ export default async function apiFetch(url, options = {}) {
       data = null;
     }
 
-    console.log(res)
 
     if (res.status === 401) {
       const refreshed = await refreshToken();
@@ -75,7 +74,7 @@ export default async function apiFetch(url, options = {}) {
 
     return data;
   } catch (error) {
-    console.error("Network or server error:", error);
+    console.error("حدث خطأ بالموقع, الرجاء المحاولة مجدداً:", error);
     return { isSuccess: false, information: "Network error" };
   }
 }

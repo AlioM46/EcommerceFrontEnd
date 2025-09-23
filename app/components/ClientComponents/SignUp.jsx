@@ -12,7 +12,7 @@ export default function Signup() {
 
   const { register } = useAuth();
 
-  // Automatically hide success message after 3 seconds
+  // إخفاء رسالة النجاح بعد 3 ثوانٍ
   useEffect(() => {
     if (submitted) {
       const timer = setTimeout(() => setSubmitted(false), 3000);
@@ -20,9 +20,10 @@ export default function Signup() {
     }
   }, [submitted]);
 
-    useEffect(() => {
+  // إخفاء الأخطاء بعد 5 ثوانٍ
+  useEffect(() => {
     if (errors) {
-      const timer = setTimeout(() => setErrors(false), 5000);
+      const timer = setTimeout(() => setErrors({}), 5000);
       return () => clearTimeout(timer);
     }
   }, [errors]);
@@ -30,23 +31,23 @@ export default function Signup() {
   const validate = () => {
     const newErrors = {};
 
-    // Name validation
+    // التحقق من الاسم
     if (!name.trim()) {
-      newErrors.name = "Name is required.";
+      newErrors.name = "الاسم مطلوب.";
     }
 
-    // Email validation
+    // التحقق من البريد الإلكتروني
     if (!email.trim()) {
-      newErrors.email = "Email is required.";
+      newErrors.email = "البريد الإلكتروني مطلوب.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Please enter a valid email.";
+      newErrors.email = "يرجى إدخال بريد إلكتروني صحيح.";
     }
 
-    // Password validation
+    // التحقق من كلمة المرور
     if (!password.trim()) {
-      newErrors.password = "Password is required.";
+      newErrors.password = "كلمة المرور مطلوبة.";
     } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters.";
+      newErrors.password = "يجب أن تكون كلمة المرور 6 أحرف على الأقل.";
     }
 
     return newErrors;
@@ -57,69 +58,67 @@ export default function Signup() {
     const validationErrors = validate();
 
     if (Object.keys(validationErrors).length === 0) {
-      const res = await register(name,email, password); 
+      const res = await register(name, email, password);
 
-      console.log(res);
       if (res?.isSuccess) {
         setSubmitted(true);
         setErrors({});
       } else {
-        setErrors({ form: res?.information || "Signup failed" });
+        setErrors({ form: res?.information || "فشل إنشاء الحساب" });
       }
     } else {
       setErrors(validationErrors);
       setSubmitted(false);
-      
     }
   };
 
   return (
     <div className="login-container">
-      <h2>Signup</h2>
+      <h2>إنشاء حساب</h2>
 
       <form onSubmit={handleSubmit} noValidate>
         {errors.form && <p className="form-error">{errors.form}</p>}
 
-        {/* Name */}
+        {/* الاسم */}
         <div className="form-group">
-          <label>Name</label>
+          <label>الاسم</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
+            placeholder="أدخل اسمك"
           />
           {errors.name && <p className="error">{errors.name}</p>}
         </div>
 
-        {/* Email */}
+        {/* البريد الإلكتروني */}
         <div className="form-group">
-          <label>Email</label>
+          <label>البريد الإلكتروني</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
+            placeholder="أدخل بريدك الإلكتروني"
           />
           {errors.email && <p className="error">{errors.email}</p>}
         </div>
 
-        {/* Password */}
+        {/* كلمة المرور */}
         <div className="form-group">
-          <label>Password</label>
+          <label>كلمة المرور</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
+            placeholder="أدخل كلمة المرور"
           />
           {errors.password && <p className="error">{errors.password}</p>}
         </div>
 
-        <button type="submit">Signup</button>
+        <button type="submit">تسجيل</button>
       </form>
 
-      {submitted && <p className="success">✅ Signup successful!</p>}
+      {submitted && <p className="success">✅ تم إنشاء الحساب بنجاح!</p>}
     </div>
   );
 }

@@ -64,7 +64,7 @@ setTimeout(() => {
       <Button>
     <Link  href={"/dashboard/addSheinProduct"}>اضافة منتج  شي ان جديد</Link>
     </Button>
-    <Button onClick={() => handleUpdatePrices()}>تحديث جميع اسعار وكميات منتجات شي ان</Button>
+    {/* <Button onClick={() => handleUpdatePrices()}>تحديث جميع اسعار وكميات منتجات شي ان</Button> */}
 </div>
   <Filter selectedFilter={selectedFilter} setSelectedFilter = {setSelectedFilter}  />
   
