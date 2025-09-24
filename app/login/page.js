@@ -8,7 +8,7 @@ export const metadata = {
   openGraph: {
   title: "تسجيل الدخول - Trend Idleb",
   description: "سجل دخولك الى الموقع بإمان.",
-    url: "https://example.com",
+    url: "https://TrendIdleb.com",
     images: ["/logo.svg"],
   },
 };

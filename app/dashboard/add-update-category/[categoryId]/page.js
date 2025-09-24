@@ -45,7 +45,7 @@ export default function AddUpdateCategory() {
     const fetchCategory = async () => {
       try {
         setLoading(true);
-        const res = await apiFetch(`/Categories/${categoryId}`);
+        const res = await apiFetch(`/Categories/${categoryId}`,{}, false);
         if (!res) throw new Error("لم يتم العثور على الفئة");
 
         setForm({

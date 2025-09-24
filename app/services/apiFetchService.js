@@ -1,3 +1,4 @@
+import next from "next";
 import { getCookie, deleteCookie } from "../utils/cookies";
 import { refreshToken } from "./AuthService";
 export let accessToken = "";
@@ -6,7 +7,7 @@ export function setAccessToken(token) {
   accessToken = token || null;
 }
 
-export default async function apiFetch(url, options = {}) {
+export default async function apiFetch(url, options = {}, caching = true , revalidateSeconds = 240) {
   // Read token from cookie
   setAccessToken(getCookie("accessToken"));
 
@@ -17,12 +18,17 @@ export default async function apiFetch(url, options = {}) {
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
   };
 
+
   try {
     let res = await fetch(`${baseUrl}${url}`, {
       ...options,
       headers,
       credentials: "include",
-    });
+            next: caching ? { revalidate: revalidateSeconds } : undefined,
+
+    },
+
+);
 
     let data;
     try {

@@ -7,7 +7,7 @@ export async function Signin(email, password) {
   const response = await apiFetch("/auth/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
-  });
+  }, false);
 
   if (response.isSuccess) {
     setCookie("accessToken", response.data.accessToken);
@@ -23,7 +23,8 @@ export async function register(name, email, password) {
   const response = await apiFetch("/auth/register", {
     method: "POST",
     body: JSON.stringify({ name, email, password }),
-  });
+
+  }, false);
 
   if (response.isSuccess) {
     setCookie("accessToken", response.data.accessToken);
@@ -36,7 +37,7 @@ export async function register(name, email, password) {
 
 // ===== Logout =====
 export async function logout() {
-  const response = await apiFetch("/auth/logout", { method: "POST" });
+  const response = await apiFetch("/auth/logout", { method: "POST" }, false);
   deleteCookie("accessToken");
   return response;
 }
@@ -49,7 +50,7 @@ export async function refreshToken() {
   const jwtDecoded = jwtDecode(token);
   const userId = jwtDecoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
-  const res = await apiFetch(`/auth/refresh-token/${userId}`, { method: "POST" });
+  const res = await apiFetch(`/auth/refresh-token/${userId}`, { method: "POST" }, false);
 
   if (res.isSuccess) {
     setCookie("accessToken", res.data.accessToken);

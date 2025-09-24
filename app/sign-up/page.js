@@ -9,7 +9,7 @@ export const metadata = {
   openGraph: {
   title: "إنشاء حساب جديد - Trend Idleb",
   description: "سجل دخولك الى الموقع بإمان.",
-    url: "https://example.com",
+    url: "https://TrendIdleb.com",
     images: ["/logo.svg"],
   },
 };

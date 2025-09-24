@@ -31,18 +31,20 @@ export default function Categories({categories}) {
     <div className="categories-wrapper">
       <Swiper
         modules={[ Autoplay]}
-        spaceBetween={20}
+        spaceBetween={10}
         slidesPerView={1}
         // navigation 
         // pagination={{ clickable: true }}
-        autoplay={{ delay: 1000, disableOnInteraction: false }} // auto-slide
+        autoplay={{ delay: 5000, disableOnInteraction: true }} // auto-slide
         loop={true} // continuous loop
         breakpoints={{
-            0: {slidesPerView:1},
-          400: { slidesPerView: 3 },
+
+          0: {slidesPerView:1},
+          300: {slidesPerView:3},
+          400: { slidesPerView: 4 },
           640: { slidesPerView: 4 },
           1024: { slidesPerView: 6 },
-          1440: { slidesPerView: 8},
+          1440: { slidesPerView: 9},
         }}
       >
         {categoriesList.map((category) => (

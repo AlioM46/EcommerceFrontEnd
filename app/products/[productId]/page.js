@@ -11,8 +11,8 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: `${product.name} - Trend Idleb`,
       description: product.description || "تفاصيل المنتج الكامل.",
-      url: `https://example.com/product/${productId}`,
-      images: ["/logo.svg"], // Can be replaced with product image
+      url: `https://TrendIdleb.com/products/${productId}`,
+      images: ["/logo.svg"], 
     },
   };
 }

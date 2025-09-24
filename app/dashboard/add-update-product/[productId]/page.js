@@ -49,7 +49,7 @@ const [chosenImages, setChosenImages] = useState([]);   // URLs selected to save
   // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
-      const res = await apiFetch("/categories");
+      const res = await apiFetch("/categories",{}, false);
       if (res?.length > 0) setCategories(res);
     };
     fetchCategories();
@@ -61,7 +61,7 @@ const [chosenImages, setChosenImages] = useState([]);   // URLs selected to save
 
     async function fetchProduct() {
       try {
-        const res = await apiFetch(`/product/${productId}`);
+        const res = await apiFetch(`/product/${productId}`,{}, false);
         if (!res) throw new Error("لم يتم العثور على المنتج");
 
         setForm(prev => ({
@@ -213,7 +213,7 @@ for (const file of selectedFiles) {
       const res = await apiFetch(isAddMode ? `/product` : `/product/${productId}`, {
         method: isAddMode ? "POST" : "PUT",
         body: JSON.stringify(payload)
-      });
+      }, false);
 
       if (res.isSuccess) {
         setToast({ error: false, message: isAddMode ? "تمت إضافة المنتج بنجاح" : "تم تحديث المنتج بنجاح", show: true });

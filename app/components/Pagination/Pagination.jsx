@@ -19,7 +19,6 @@ export default function Pagination({ selectedFilter, categoryId = 0, ProductComp
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
 
 
-  console.log("CURRENT PAGE" ,currentPage)
 
   const { setLoading } = useLoading();
 
@@ -137,7 +136,7 @@ export default function Pagination({ selectedFilter, categoryId = 0, ProductComp
       {/* Pagination controls */}
       <div className="pagination">
         <button onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} disabled={currentPage === 1}>
-          Prev
+          الرجوع
         </button>
 
         {getPageNumbers().map((page, idx) =>
@@ -153,7 +152,7 @@ export default function Pagination({ selectedFilter, categoryId = 0, ProductComp
         )}
 
         <button onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} disabled={currentPage === totalPages}>
-          Next
+          التالي
         </button>
       </div>
     </div>

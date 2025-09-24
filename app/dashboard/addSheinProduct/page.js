@@ -31,7 +31,7 @@ const {setLoading , loading} = useLoading();
         try {
 const res = await apiFetch(
     `/SheinProducts/?url=${encodeURIComponent(sheinUrl)}&country=${countryCode.toUpperCase()}&currency=USD&language=ar&max_items_count=1&max_items_per_url=0&include_size_chart=false`,
-    { method: "POST" }
+    { method: "POST" },false
 );
 
 

@@ -29,7 +29,7 @@ const handleUpdatePrices = async () => {
 
   try {
     setLoading(true)
-    const response = await apiFetch("/Product/upadte-all-shein-price");
+    const response = await apiFetch("/Product/upadte-all-shein-price",{}, false);
 
     if (response.isSuccess) {
             setToast({ show: true, message: "تم تحديث المنتجات بنجاح!" });

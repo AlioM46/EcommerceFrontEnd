@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 import "./normlize.css";
 import ClientAppWrapper from "./ClientAppWrapper";
@@ -9,7 +10,7 @@ export const metadata = {
   openGraph: {
     title: "Trend Idleb",
     description: "مرحبًا بكم في Trend Idleb. اكتشفوا منتجاتنا وخدماتنا بسهولة.",
-    url: "https://example.com", // Your main site URL
+    url: "https://TrendIdleb.com", // Your main site URL
     images: ["../public/logo.svg"],
   },
 };
@@ -27,6 +28,8 @@ export default function RootLayout({ children }) {
             <div className="container">{children}</div>
 <TopPromo/>
         </ClientAppWrapper>
+
+        <Analytics/>
       </body>
     </html>
   );

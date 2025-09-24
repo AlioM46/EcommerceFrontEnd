@@ -1,0 +1,71 @@
+.category-wrapper {
+    margin-top: 3.5rem;
+}
+
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;      /* ✅ allows wrapping on small screens */
+  align-items: center;
+  gap: 0.35rem;
+  font-family: inherit;
+  margin-bottom: 2.5rem;
+}
+
+.breadcrumb a {
+  color: var(--text-link);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.2rem;    /* default desktop size */
+}
+
+.breadcrumb .current {
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 1.5rem;    /* current category bigger */
+}
+
+.breadcrumb .separator {
+  color: var(--text-secondary) !important;
+  margin: 0 .45rem;
+  font-size: 1.2rem;
+}
+
+.breadcrumb a  {
+
+    color: var(--text-link) !important;
+}
+
+
+@media (max-width: 410px) {
+  /* .breadcrumb {
+    gap: .4rem;
+  }*/
+
+  .breadcrumb .separator {
+    margin: 0 .35rem;
+  } 
+
+  .breadcrumb a {
+    font-size: .75rem !important;    
+  }
+  .breadcrumb .current {
+    font-size: .8rem !important;
+  }
+  .breadcrumb .separator {
+    font-size: .75rem !important;
+  }
+}
+
+
+@media (max-width: 780px) {
+  .breadcrumb a {
+    font-size: .9rem;     
+  }
+  .breadcrumb .current {
+    font-size: 1rem;
+  }
+  .breadcrumb .separator {
+    font-size: .9rem;
+  }
+}

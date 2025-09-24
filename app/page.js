@@ -11,7 +11,7 @@ export const metadata = {
   openGraph: {
     title: "الصفحة الرئيسية - Trend Idleb",
     description: "تصفح أحدث المنتجات والعروض في الصفحة الرئيسية لموقعنا.",
-    url: "https://example.com",
+    url: "https://TrendIdleb.com",
     images: ["/logo.svg"],
   },
 };
@@ -50,7 +50,7 @@ export default async function Home() {
 
 <CategoriesLine/>
 <Section category ={"ملابس النوم والداخلية"} headerText = "القسم المميز" showLink={true} linkText = "عرض المزيد" />
-<Section category = {"الأطفال"} headerText = "الأطفال" showLink={true} linkText = "عرض المزيد"/>
+<Section category = {"أطفال"} headerText = "الأطفال" showLink={true} linkText = "عرض المزيد"/>
     </div>
   );  
 }
