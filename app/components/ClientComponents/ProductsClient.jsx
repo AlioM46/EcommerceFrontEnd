@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Pagination from "../../components/Pagination/Pagination";
 import "../../products/products.css";
 import Filter from "../../components/Filter/Filter";
@@ -43,10 +43,12 @@ export default function ProductsClient() {
       <Categories categories={categories} />
       <Filter selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
 
-      <Pagination
+   <Suspense>
+       <Pagination
         selectedFilter={selectedFilter}
         outerSearchQuery={searchQuery}
       />
+   </Suspense>
     </div>
   );
 }

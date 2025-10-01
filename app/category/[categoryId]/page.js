@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Filter from "@/app/components/Filter/Filter";
 import Pagination from "@/app/components/Pagination/Pagination";
 import SubHeader from "@/app/components/subHeader/SubHeader";
@@ -61,7 +61,11 @@ export default function CategoryProducts({ params, searchParams }) {
 
       {/* Products filters and pagination */}
       <Filter selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
-      <Pagination selectedFilter={selectedFilter} categoryId={categoryId} />
+
+      <Suspense>
+              <Pagination selectedFilter={selectedFilter} categoryId={categoryId} />
+
+      </Suspense>
     </div>
   );
 }

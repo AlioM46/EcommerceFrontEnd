@@ -52,6 +52,8 @@ export default function Pagination({
     }
   };
 
+
+
   // ✅ Run whenever query params change
   useEffect(() => {
     fetchProducts(pageFromUrl, searchFromUrl || outerSearchQuery);

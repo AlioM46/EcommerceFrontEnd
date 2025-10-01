@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import "./dashboard.css"
 import Button from '../components/Button/Button'
 import Filter from '../components/Filter/Filter'
@@ -68,8 +68,10 @@ setTimeout(() => {
 </div>
   <Filter selectedFilter={selectedFilter} setSelectedFilter = {setSelectedFilter}  />
   
-        <Pagination selectedFilter={selectedFilter} ProductComponent={DashboardProduct} onlyActiveProducts= {false}  />
-  
+<Suspense>
+          <Pagination selectedFilter={selectedFilter} ProductComponent={DashboardProduct} onlyActiveProducts= {false}  />
+
+  </Suspense>  
   </>
 
 
