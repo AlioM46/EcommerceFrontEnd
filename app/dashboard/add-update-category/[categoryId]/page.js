@@ -111,6 +111,7 @@ export default function AddUpdateCategory() {
         const formData = new FormData();
         formData.append("file", selectedImage);
 
+        // upload to cloudflare
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Files/upload`, {
           method: "POST",
           body: formData
