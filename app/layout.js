@@ -26,6 +26,7 @@ export default function RootLayout({ children }) {
       <body>
         <ClientAppWrapper>
             <div className="container">{children}</div>
+        npm install stripe @stripe/react-stripe-js
 <TopPromo/>
         </ClientAppWrapper>
 

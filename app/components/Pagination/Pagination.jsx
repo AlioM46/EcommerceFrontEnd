@@ -41,8 +41,8 @@ export default function Pagination({
         `/product/order?orderedBy=${selectedFilter}&pageNumber=${page}&pageSize=${itemsPerPage}&categoryId=${categoryId}&searchQuery=${query || ""}&onlyActive=${onlyActiveProducts}`
       );
 
-      setProducts(res.products);
-      setTotalProducts(res.totalProducts);
+      setProducts(res.data.data);
+      setTotalProducts(res.data.data.length || 0);
       setLoadingSkeleton(false);
       setLoading(false);
     } catch (error) {

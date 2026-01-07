@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import "./CartForm.css";
 import Button from "../Button/Button";
 import { useAuth } from "@/app/context/AuthContext";
+import apiFetch from "@/app/services/apiFetchService";
 
 export default function CheckoutForm() {
   const { cartItems } = useAuth();
-
   const [city, setCity] = useState("إدلب");
   const [cities, setCities] = useState([]);
   const [formData, setFormData] = useState({
@@ -20,6 +20,7 @@ export default function CheckoutForm() {
   const [subtotal, setSubtotal] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [total, setTotal] = useState(0);
+  const [clientSecret,setClientSecret] = useState("");
 
   // Load Syrian cities
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function CheckoutForm() {
   // Calculate subtotal & total whenever cartItems change
   useEffect(() => {
     const sum = cartItems.reduce((acc, p) => {
-      const price = p.discountPrice && p.discountPrice > 0 ? p.discountPrice : p.price;
+      const price = p.discount_price && p.discount_price > 0 ? p.discount_price : p.price;
       return acc + price * (p.qty || 1);
     }, 0);
 
@@ -46,6 +47,58 @@ export default function CheckoutForm() {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
+
+
+  const handleCheckout = async () => {
+//   'user_id','shipping_address_id','total_price','status'
+
+if (cartItems.length === 0) {
+  alert("Your cart is empty.");
+  return;
+}
+
+let order_products = cartItems.map(item => ({
+  product_id: item.id,
+  quantity: item.qty || 1,
+}));
+
+    const order = await apiFetch("/order", {
+      method: "POST",
+      body: JSON.stringify({
+        address_id: 1,
+        items: order_products
+      })
+    });
+
+    if (order.original.isSuccess) {
+    } else {
+      alert("Failed to create order.");
+      return;
+    }
+
+    let orderId = order.original.order.id;
+        const paymentIntent = await apiFetch(`/payments/intent/${orderId}`, {
+      method: "POST",
+    });
+
+
+    if (paymentIntent.isSuccess) {
+    } else {
+      alert("Failed to create paymentIntent.");
+      return;
+    }
+
+    if (!paymentIntent.client_secret) {
+      alert("Client secret is missing.");
+      return;
+  } else {
+
+    window.location.href = `/checkout/${paymentIntent.client_secret}` ;
+  }
+
+
+}
+
 
   // Validation
   const validate = () => {
@@ -113,7 +166,7 @@ const handleWhatsappRedirection = () => {
   // Cart items
 message += `📦 *المنتجات:*\n`;
 order.cartItems.forEach((p, i) => {
-  const price = p.discountPrice && p.discountPrice > 0 ? p.discountPrice : p.price;
+  const price = p.discount_price && p.discount_price > 0 ? p.discount_price : p.price;
   const colorText = p.color ? `, اللون: ${p.color}` : "";
   const sizeText = p.size ? `, المقاس: ${p.size}` : "";
 
@@ -150,6 +203,8 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
 
   return (
     <div className="checkout-container">
+
+
       <h2 className="section-title">معلوماتك الشخصية</h2>
 
       <div className="grid-2 mb-4">
@@ -220,7 +275,9 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
       <div className="order-details mb-4">
         {cartItems.length > 0 ? (
           cartItems.map((p, i) => {
-            const price = p.discountPrice && p.discountPrice > 0 ? p.discountPrice : p.price;
+
+            console.log(p);
+            const price = p.discount_price && p.discount_price > 0 ? p.discount_price : p.price;
             return (
               <div key={i} className="order-item">
                 <span>{p.name}</span>
@@ -255,6 +312,11 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
 
       <Button onClick={() => handleOrder()} >
         إتمام الطلب
+      </Button>
+<br />
+<br />
+            <Button onClick={() =>  handleCheckout()} >
+        إتمام الطلب | stripe
       </Button>
     </div>
   );

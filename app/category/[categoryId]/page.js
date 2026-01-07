@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Filter from "@/app/components/Filter/Filter";
 import Pagination from "@/app/components/Pagination/Pagination";
 import SubHeader from "@/app/components/subHeader/SubHeader";
@@ -9,7 +9,8 @@ import Link from "next/link";
 import "./categoryProduct.css"
 
 export default function CategoryProducts({ params, searchParams }) {
-  const categoryId = params.categoryId;
+  const resolvedParams = React.use(params); // unwrap the promise
+  const categoryId = resolvedParams.categoryId;
 
   const categoryName = searchParams?.name
     ? decodeURIComponent(searchParams.name)

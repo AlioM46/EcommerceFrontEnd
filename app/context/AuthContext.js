@@ -98,6 +98,7 @@ export const AuthProvider = ({ children }) => {
   // ===== Auth actions =====
   const login = async (email, password) => {
     const res = await Signin(email, password);
+
     if (res?.isSuccess) {
       setCookie("accessToken", res.data.accessToken); // store in cookie
       setAccessToken(res.data.accessToken);

@@ -49,6 +49,8 @@ export default function Login() {
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
       const res = await login(email, password);
+
+     
       setLoading(false);
 
       if (res?.isSuccess) {

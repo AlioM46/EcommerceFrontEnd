@@ -11,6 +11,8 @@ export default async function apiFetch(url, options = {}, caching = true , reval
   // Read token from cookie
   setAccessToken(getCookie("accessToken"));
 
+  console.log(getCookie("accessToken"));
+
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const headers = {
     "Content-Type": "application/json",

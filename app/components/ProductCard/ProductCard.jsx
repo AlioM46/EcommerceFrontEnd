@@ -12,9 +12,9 @@ export default function ProductCard({ product }) {
     id,
     name = "No Name",
     price = 0,
-    discountPrice = null,
-    productImagesUrl = [],
-    inStock = 0,
+    discount_price = null,
+    images = [],
+    in_stock = 0,
   } = product;
 
   const { addToCart } = useAuth();
@@ -23,17 +23,18 @@ export default function ProductCard({ product }) {
   // Resolve pre-signed URL asynchronously
   useEffect(() => {
     const fetchImage = async () => {
-      if (productImagesUrl?.length > 0) {
-        const url = await getImageSrc(productImagesUrl[0]);
+      console.log()
+      if (images?.length > 0) {
+        const url = await getImageSrc(images[0].url);
         setImgSrc(url || "/ProductImage-Temp.jpg");
       }
     };
     fetchImage();
-  }, [productImagesUrl]);
+  }, [images]);
 
-  const isThereDiscount = discountPrice > 0;
+  const isThereDiscount = discount_price > 0;
   const discountPercentage = isThereDiscount
-    ? Math.round(((price - discountPrice) / price) * 100)
+    ? Math.round(((price - discount_price) / price) * 100)
     : 0;
 
   return (
@@ -50,8 +51,8 @@ export default function ProductCard({ product }) {
         </div>
 
         <div className="price-section">
-          <p className={`stock ${inStock > 0 ? "in-stock" : "out-stock"}`}>
-            {inStock > 0 ? "متوفر الان" : "غير متوفر"}
+          <p className={`stock ${in_stock > 0 ? "in-stock" : "out-stock"}`}>
+            {in_stock > 0 ? "متوفر الان" : "غير متوفر"}
           </p>
           {isThereDiscount ? (
             <>
@@ -61,7 +62,7 @@ export default function ProductCard({ product }) {
               </span>
               <span className="price">
                 <span className="dollarSign">$</span>
-                {discountPrice}
+                {discount_price}
               </span>
             </>
           ) : (

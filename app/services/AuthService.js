@@ -9,6 +9,9 @@ export async function Signin(email, password) {
     body: JSON.stringify({ email, password }),
   }, false);
 
+       console.log("Login response:", response);
+
+
   if (response.isSuccess) {
     setCookie("accessToken", response.data.accessToken);
   } else {
@@ -49,8 +52,8 @@ export async function refreshToken() {
 
   const jwtDecoded = jwtDecode(token);
   const userId = jwtDecoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-
-  const res = await apiFetch(`/auth/refresh-token/${userId}`, { method: "POST" }, false);
+  console.log("Refreshing token for userId:", jwtDecoded);
+  const res = await apiFetch(`/auth/refresh/${userId}`, { method: "POST" }, false);
 
   if (res.isSuccess) {
     setCookie("accessToken", res.data.accessToken);

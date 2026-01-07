@@ -22,7 +22,7 @@ export default function Product() {
   
   const [resolvedImages, setResolvedImages] = useState([]);
 
-  const productImagesUrls = product.productImagesUrl || [];
+  const productImagesUrls = product.images || [];
 
 
 
@@ -37,12 +37,15 @@ export default function Product() {
   useEffect(() => {
   if (!productImagesUrls || productImagesUrls.length === 0) return;
 
+
   Promise.all(productImagesUrls.map(url => getImageSrc(url)))
     .then(urls => {
       setResolvedImages(urls);
       setCurrentImage(urls[0] || "/ProductImage-Temp.jpg");
     })
     .catch(err => console.error(err));
+
+
 }, [productImagesUrls]);
 
 
@@ -51,14 +54,18 @@ export default function Product() {
     const fetchProduct = async () => {
       setLoading(true)
       const res = await apiFetch(`/product/${productId}`);
-      setProduct(res);
+      console.log(res.data);
 
-      setCurrentImage(res.productImagesUrl[0] || "");
-      setChosenColor(res.productColors[0] || "")
-      setChosenSize(res.productSizes[0] || "")
+      
+      setProduct(res.data);
+      setCurrentImage(res.data?.images[0]?.url || "/ProductImage-Temp.jpg");
+      setChosenColor(res.data?.colors[0]?.color)
+      setChosenSize(res.data?.sizes[0]?.size )
       setLoading(false)
+
     }
     fetchProduct();
+
   }, [productId]);
 
 
@@ -68,7 +75,7 @@ export default function Product() {
       
     const phoneNumber = "963947739774";
 var message = "";
-  const price = product.discountPrice && product.discountPrice > 0 ?product.discountPrice : product.price;
+  const price = product.discount_price && product.discount_price > 0 ?product.discount_price : product.price;
   const colorText = chosenColor? `\n\nاللون: ${chosenColor}\n` : "";
   const sizeText = chosenSize? `المقاس: ${chosenSize}\n` : "";
 
@@ -94,9 +101,9 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
 
 
   let priceJsx;
-  if (product.discountPrice > 0) {
+  if (product.discount_price > 0) {
     priceJsx = <>
-      <span className="prd-price"><span className="dollarSign">$</span>{product.discountPrice}</span>
+      <span className="prd-price"><span className="dollarSign">$</span>{product.discount_price}</span>
       <br/>
       <span className="prd-old-price"><span className="dollarSign">$</span>{product.price}</span>
     </>
@@ -140,30 +147,31 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
         </div>
 
 
-{product.productColors?.length > 0 && (
+{product.colors?.length > 0 && (
           <div className="prd-product-colors">
             <strong>الألوان:</strong>{" "}
-            {product.productColors.map((color, i) => (
+            {product.colors.map((color, i) => (
               <button
                 key={i}
-                onClick={() => setChosenColor(color)}
-                className={`prd-color-circle ${chosenColor === color ? "prd-active-color-button" : ""}`}
+                onClick={() => setChosenColor(color.color)}
+                className={`prd-color-circle ${chosenColor === color.color ? "prd-active-color-button" : ""}`}
               >
-                {color[0]?.toUpperCase() + color?.slice(1)}
+                {color.color[0]?.toUpperCase() + color.color?.slice(1)}
               </button>
             ))}
           </div>
         )}
-                {product.productSizes?.length > 0 && (
+                {product.sizes?.length > 0 && (
           <div className="prd-product-sizes">
             <strong>المقاسات:</strong>{" "}
-            {product.productSizes.map((size, i) => (
+            {product.sizes.map((size, i) => (
               <button
                 key={i}
-                onClick={() => setChosenSize(size)}
-                className={`prd-size-tag ${chosenSize === size ? "prd-active-size-button" : ""}`}
+                onClick={() => setChosenSize(size.size)}
+                className={`prd-size-tag ${chosenSize === size.size ? "prd-active-size-button" : ""}`}
               >
-                {size[0]?.toUpperCase() + size?.slice(1)}
+                {size.size[0]?.toUpperCase() + size.size?.slice(1)}
+    
               </button>
             ))}
           </div>
@@ -172,7 +180,7 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
 
 
 
-        {product.inStock > 0 ?  
+        {product.in_stock > 0 ?  
           <h2 className="prd-product-inStock">متوفر الان</h2> :
           <h2 className="prd-product-outOfStock">نفذ المخزون</h2> 
         }
@@ -183,7 +191,7 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
           <div className="prd-product-categories">
             <strong>الفئة:</strong>{" "}
             {product.categories.map((cat, i) => (
-              <span key={i} className="prd-category-tag">{cat}</span>
+              <span key={i} className="prd-category-tag">{cat.name}</span>
             ))}
           </div>
         )}
@@ -197,7 +205,7 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
           {[...Array(5)].map((_, i) => (
             <span key={i} className={i < product.rating ? "prd-star filled" : "prd-star"}>★</span>
           ))}
-          <span className="prd-reviews-count">({product.reviewsCount})</span>
+          <span className="prd-reviews-count">({product.reviews_count})</span>
         </div>
 
 
@@ -224,7 +232,7 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
         <div className="prd-main-image-wrapper">
           <img
             className="prd-main-image"
-            src={currentImage}
+            src={currentImage || "/ProductImage-Temp.jpg"}
             alt="product image"
           />
         </div>

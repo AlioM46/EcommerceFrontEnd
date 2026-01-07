@@ -132,11 +132,11 @@ const toggleImageSelection = (url) => {
   const validateForm = () => {
     if (!form.name.trim()) return "الاسم مطلوب";
     if (isNaN(form.price) || Number(form.price) <= 0) return "السعر يجب أن يكون رقم أكبر من صفر";
-    if (form.discountPrice && Number(form.discountPrice) > Number(form.price))
+    if (form.discount_price && Number(form.discount_price) > Number(form.price))
       return "سعر الخصم يجب أن يكون أقل من السعر الأصلي";
     if (form.rating && (form.rating < 0 || form.rating > 5)) return "التقييم يجب أن يكون بين 0 و 5";
     if (form.reviewsCount && form.reviewsCount < 0) return "عدد المراجعات لا يمكن أن يكون سالباً";
-    if (form.inStock && form.inStock < 0) return "الكمية المتاحة لا يمكن أن تكون سالبة";
+    if (form.in_stock && form.in_stock < 0) return "الكمية المتاحة لا يمكن أن تكون سالبة";
     return null;
   };
 
@@ -195,8 +195,8 @@ for (const file of selectedFiles) {
   categoryIds: form?.categoryIds[0] == "" ? [] :form.categoryIds,
   productImagesUrl: finalImageUrls, // <-- include it here
   price: Number(parseFloat(form.price).toFixed(2)),
-  discountPrice: form.discountPrice ? Number(parseFloat(form.discountPrice).toFixed(2)) : 0,
-  inStock: parseInt(form.inStock || 0),
+  discountPrice: form.discount_price ? Number(parseFloat(form.discount_price).toFixed(2)) : 0,
+  inStock: parseInt(form.in_stock || 0),
   rating: parseFloat(form.rating || 0),
   reviewsCount: parseInt(form.reviewsCount || 0),
   categories: form.categories.filter(c => c.trim() !== ""),
@@ -241,7 +241,7 @@ for (const file of selectedFiles) {
       <input type="number" name="price" value={form.price} onChange={handleChange} />
 
       <label>سعر الخصم</label>
-      <input type="number" name="discountPrice" value={form.discountPrice} onChange={handleChange} />
+      <input type="number" name="discountPrice" value={form.discount_price} onChange={handleChange} />
 
       <label>العلامة التجارية</label>
       <input name="brand" value={form.brand} onChange={handleChange} />
@@ -253,7 +253,7 @@ for (const file of selectedFiles) {
       <input type="number" name="reviewsCount" min={0} value={form.reviewsCount} onChange={handleChange} />
 
       <label>الكمية المتاحة</label>
-      <input type="number" name="inStock" min={0} value={form.inStock} onChange={handleChange} />
+      <input type="number" name="inStock" min={0} value={form.in_stock} onChange={handleChange} />
 
       <label>الفئة</label>
       <select onChange={(e) => setForm({ ...form, categoryIds: [e.target.value] })} value={form.categoryIds[form.categoryIds.length - 1] || ""}>

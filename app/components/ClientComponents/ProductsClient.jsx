@@ -41,6 +41,7 @@ export default function ProductsClient() {
     <div>
       <SubHeader text="الأقسام" showLink={false} />
       <Categories categories={categories} />
+      
       <Filter selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
 
    <Suspense>

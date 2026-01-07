@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { getImageSrc } from "@/app/utils/handleUrls";
 
 export default function ProductCard({ product, onChangeQty = () => {}, onRemove = () => {} }) {
-  const { name, price, productImagesUrl, deliveryText, discountPrice, qty = 1 , color , size} = product;
+  const { name, price, productImagesUrl, deliveryText, discount_price, qty = 1 , color , size} = product;
 
   const [resolvedImage,  setResolvedImage] = useState()
   const router = useRouter();
@@ -13,9 +13,9 @@ export default function ProductCard({ product, onChangeQty = () => {}, onRemove 
   let isThereDiscount = false;
   let discountPercentage = 0;
 
-  if (discountPrice > 0) {
+  if (discount_price > 0) {
     isThereDiscount = true;
-    discountPercentage = Math.round(((price -discountPrice) /price) * 100);
+    discountPercentage = Math.round(((price -discount_price) /price) * 100);
   }
 
 
@@ -85,9 +85,9 @@ export default function ProductCard({ product, onChangeQty = () => {}, onRemove 
           {isThereDiscount && <span className="pc-badge">{discountPercentage}%</span>}       
 
           <div className="pc-priceArea">
-            {discountPrice > 0 ? (
+            {discount_price > 0 ? (
               <>
-                <div className="pc-currentPrice">${discountPrice.toFixed(2)}</div>
+                <div className="pc-currentPrice">${discount_price.toFixed(2)}</div>
                 <div className="pc-oldPrice">${price.toFixed(2)}</div>
               </>
             ) : (
