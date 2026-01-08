@@ -29,6 +29,7 @@ export async function register(name, email, password) {
 
   }, false);
 
+
   if (response.isSuccess) {
     setCookie("accessToken", response.data.accessToken);
   } else {
@@ -51,7 +52,7 @@ export async function refreshToken() {
   if (!token) return false;
 
   const jwtDecoded = jwtDecode(token);
-  const userId = jwtDecoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+  const userId = jwtDecoded['sub'];
   console.log("Refreshing token for userId:", jwtDecoded);
   const res = await apiFetch(`/auth/refresh/${userId}`, { method: "POST" }, false);
 

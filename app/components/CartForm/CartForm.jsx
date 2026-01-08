@@ -4,32 +4,36 @@ import "./CartForm.css";
 import Button from "../Button/Button";
 import { useAuth } from "@/app/context/AuthContext";
 import apiFetch from "@/app/services/apiFetchService";
+import Link from "next/link";
 
 export default function CheckoutForm() {
-  const { cartItems } = useAuth();
-  const [city, setCity] = useState("إدلب");
-  const [cities, setCities] = useState([]);
+  const { cartItems , setCartItems} = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     discountCode: "",
-    address: ""
+    address_id: null, // <-- store selected address ID
   });
 
+  const [addresses, setAddresses] = useState([]);
   const [errors, setErrors] = useState({});
   const [subtotal, setSubtotal] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [total, setTotal] = useState(0);
-  const [clientSecret,setClientSecret] = useState("");
 
-  // Load Syrian cities
+  // Load user addresses
   useEffect(() => {
-    const storedCities = [
-      "دمشق","حلب","حمص","حماة","اللاذقية","طرطوس",
-      "درعا","القنيطرة","ريف دمشق","دير الزور","الرقة",
-      "الحسكة","إدلب","السويداء"
-    ];
-    setCities(storedCities);
+    const fetchAddresses = async () => {
+      const res = await apiFetch("/address"); // GET /address
+      if (res?.isSuccess) {
+        setAddresses(res.data || []);
+        if (res.data.length > 0) {
+          setFormData(prev => ({ ...prev, address_id: res.data[0].id }));
+        }
+      }
+    };
+
+    fetchAddresses();
   }, []);
 
   // Calculate subtotal & total whenever cartItems change
@@ -48,242 +52,72 @@ export default function CheckoutForm() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleAddressChange = (e) => {
+    setFormData(prev => ({ ...prev, address_id: parseInt(e.target.value) }));
+  };
 
   const handleCheckout = async () => {
-//   'user_id','shipping_address_id','total_price','status'
+    if (cartItems.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
 
-if (cartItems.length === 0) {
-  alert("Your cart is empty.");
-  return;
-}
+    if (!formData.address_id) {
+      alert("Please select an address or create a new one.");
+      return;
+    }
 
-let order_products = cartItems.map(item => ({
-  product_id: item.id,
-  quantity: item.qty || 1,
-}));
+    const order_products = cartItems.map(item => ({
+      product_id: item.id,
+      quantity: item.qty || 1,
+    }));
 
-    const order = await apiFetch("/order", {
+    const checkoutAndPaymentIntent = await apiFetch("/checkout", {
       method: "POST",
       body: JSON.stringify({
-        address_id: 1,
-        items: order_products
-      })
+        address_id: formData.address_id,
+        items: order_products,
+      }),
     });
 
-    if (order.original.isSuccess) {
-    } else {
-      alert("Failed to create order.");
-      return;
+    if (checkoutAndPaymentIntent.isSuccess) {
+      window.location.href = `/checkout/${checkoutAndPaymentIntent.client_secret}`;
+      setCartItems([]);
+      window.localStorage.setItem("cart", JSON.stringify([]));
     }
-
-    let orderId = order.original.order.id;
-        const paymentIntent = await apiFetch(`/payments/intent/${orderId}`, {
-      method: "POST",
-    });
-
-
-    if (paymentIntent.isSuccess) {
-    } else {
-      alert("Failed to create paymentIntent.");
-      return;
-    }
-
-    if (!paymentIntent.client_secret) {
-      alert("Client secret is missing.");
-      return;
-  } else {
-
-    window.location.href = `/checkout/${paymentIntent.client_secret}` ;
-  }
-
-
-}
-
-
-  // Validation
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "الاسم مطلوب";
-    else if (formData.name.trim().length < 2) newErrors.name = "الاسم قصير جداً";
-
-    if (!formData.phone.trim()) newErrors.phone = "رقم الهاتف مطلوب";
-    else if (!/^\d{8,15}$/.test(formData.phone.trim())) newErrors.phone = "رقم الهاتف غير صالح";
-
-    if (!formData.address.trim()) newErrors.address = "العنوان مطلوب";
-    if (!city) newErrors.city = "المدينة مطلوبة";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
-
-
-const handleOrder = () => {
-  // if (!validate()) return;
-
-  const order = {
-    ...formData,
-    city,
-    cartItems,
-    subtotal,
-    shipping,
-    total,
-    date: new Date().toISOString()
-  };
-
-  localStorage.setItem("checkoutOrder", JSON.stringify(order));
-  alert("سيتم تحويلك الى الواتساب للشراء.... الرجاء الانتظار");
-
-  // ✅ Call WhatsApp redirect
-  handleWhatsappRedirection();
-};
-
-
-const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONT_END_URL;
-
-
-const handleWhatsappRedirection = () => {
-  const phoneNumber = "963947739774"; // your WhatsApp number
-  const order = JSON.parse(localStorage.getItem("checkoutOrder"));
-
-  if (!order) return;
-
-  let message = `🛒 *طلب جديد* 🛒\n\n`;
-
-  // Customer info
-  message += `👤 الاسم: ${order.name}\n`;
-  message += `📞 الهاتف: ${order.phone}\n`;
-  message += `🏙️ المدينة: ${order.city}\n`;
-  message += `📍 العنوان: ${order.address}\n`;
-
-
-  if (order.discountCode) {
-    message += `🏷️ كود الخصم: ${order.discountCode}\n`;
-  }
-  message += `\n`;
-
-
-
-  // Cart items
-message += `📦 *المنتجات:*\n`;
-order.cartItems.forEach((p, i) => {
-  const price = p.discount_price && p.discount_price > 0 ? p.discount_price : p.price;
-  const colorText = p.color ? `, اللون: ${p.color}` : "";
-  const sizeText = p.size ? `, المقاس: ${p.size}` : "";
-
-  if (p.sku != "" && p.sku != null) {
-  message += `SKU Code: ${p?.sku}\n`
-
-  }
-  message += `${i + 1}. ${p.name} (معرف: ${p.id})${colorText}${sizeText} — ${p.qty || 1} × ${price.toFixed(2)}$\n`;
-  message += `رابط المنتج:\t${FRONTEND_URL}/products/${p.id}\n`;
-  message += "--------------------------------------------------------------------\n"
-
-});
-
-  
-
-  message += `\n`;
-
-  // Totals
-  message += `💰 المجموع الفرعي: ${order.subtotal.toFixed(2)}$\n`;
-  message += `🚚 الشحن: ${order.shipping.toFixed(2)}$\n`;
-  message += `✅ الإجمالي: *${order.total.toFixed(2)}$*\n`;
-const dateObj = new Date(order.date);
-const date = dateObj.toLocaleDateString("ar-SY", { year: "numeric", month: "2-digit", day: "2-digit" });
-const time = dateObj.toLocaleTimeString("ar-SY", { hour: "2-digit", minute: "2-digit" });
-
-message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
-
-  // ✅ Open WhatsApp
-  const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank");
-};
-
-  
 
   return (
     <div className="checkout-container">
+      <h2 className="section-title">اختر عنوان الشحن</h2>
 
-
-      <h2 className="section-title">معلوماتك الشخصية</h2>
-
-      <div className="grid-2 mb-4">
-        <div className="form-group">
-          <label>اسمك</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            placeholder="اكتب"
-          />
-          {errors.name && <p className="error">{errors.name}</p>}
-        </div>
-
-        <div className="form-group">
-          <label>رقمك</label>
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            placeholder="905523434343"
-          />
-          {errors.phone && <p className="error">{errors.phone}</p>}
-        </div>
-      </div>
-
-      <div className="grid-2 mb-4">
-        <div className="form-group">
-          <label>كود الخصم</label>
-          <input
-            type="text"
-            name="discountCode"
-            value={formData.discountCode}
-            onChange={handleInputChange}
-            placeholder="xxxxxx"
-          />
-        </div>
-
-        <div className="form-group">
-          <label>اختر المدينة</label>
-          <select value={city } onChange={(e) => setCity(e.target.value)}>
-            <option value="">اختر المدينة</option>
-            {cities.map((c, i) => (
-              <option key={i} value={c}>{c}</option>
+      {addresses.length > 0 ? (
+        <div className="form-group mb-4">
+          <select value={formData.address_id} onChange={handleAddressChange}>
+            {addresses.map(addr => (
+              <option key={addr.id} value={addr.id}>
+                {addr.full_name} - {addr.address}, {addr.city}, {addr.country}
+              </option>
             ))}
           </select>
-          {errors.city && <p className="error">{errors.city}</p>}
         </div>
-      </div>
-
-      <div className="form-group mb-4">
-        <label>عنوانك بالتفصيل</label>
-        <input
-          type="text"
-          name="address"
-          value={formData.address}
-          onChange={handleInputChange}
-          placeholder="اكتب"
-        />
-        {errors.address && <p className="error">{errors.address}</p>}
-      </div>
-
-      <hr className="divider" />
+      ) : (
+        <p>
+          لم يتم إضافة عناوين بعد. <Link href="/address">اضغط هنا لإضافة عنوان جديد</Link>
+        </p>
+      )}
 
       <h2 className="section-title">تفاصيل الطلبية</h2>
       <div className="order-details mb-4">
         {cartItems.length > 0 ? (
           cartItems.map((p, i) => {
-
-            console.log(p);
             const price = p.discount_price && p.discount_price > 0 ? p.discount_price : p.price;
             return (
               <div key={i} className="order-item">
                 <span>{p.name}</span>
                 <span>{p.qty || 1} × {price.toFixed(2)} $</span>
               </div>
-            )
+            );
           })
         ) : (
           <div className="order-item placeholder">
@@ -310,13 +144,9 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
         <span>{total.toFixed(2)} $</span>
       </div>
 
-      <Button onClick={() => handleOrder()} >
-        إتمام الطلب
-      </Button>
-<br />
-<br />
-            <Button onClick={() =>  handleCheckout()} >
-        إتمام الطلب | stripe
+      <br />
+      <Button onClick={handleCheckout}>
+        إتمام الطلب | Stripe
       </Button>
     </div>
   );

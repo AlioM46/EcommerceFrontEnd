@@ -38,7 +38,7 @@ export default function CategoryCard({ id, name, imgUrl, productCount, fetchCate
     if (!isConfirmed) return;
 
     try {
-      const res = await apiFetch(`/Categories/${id}`, { method: "DELETE" });
+      const res = await apiFetch(`/categories/${id}`, { method: "DELETE" });
       if (res.isSuccess) {
         setToast({ show: true, message: "تم حذف التصنيف بنجاح", error: false });
         if (fetchCategories) fetchCategories();
@@ -59,7 +59,7 @@ export default function CategoryCard({ id, name, imgUrl, productCount, fetchCate
 
       <div className="category-info">
         <h3 className="category-name">{name}</h3>
-        <p className="category-count">{productCount} منتج</p>
+        {/* <p className="category-count">{productCount} منتج</p> */}
 
         <div className="category-buttons">
          <div className="category-buttons">
@@ -77,12 +77,12 @@ export default function CategoryCard({ id, name, imgUrl, productCount, fetchCate
   </Button>
 
   {/* VIEW ALL PRODUCTS */}
-  <Button
+  {/* <Button
     className="category-btn view-btn"
     onClick={() => router.push(`/dashboard/products?categoryId=${id}`)}
   >
     عرض جميع المنتجات
-  </Button>
+  </Button> */}
 </div>
 
         </div>

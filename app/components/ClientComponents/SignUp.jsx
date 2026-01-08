@@ -60,6 +60,7 @@ export default function Signup() {
     if (Object.keys(validationErrors).length === 0) {
       const res = await register(name, email, password);
 
+
       if (res?.isSuccess) {
         setSubmitted(true);
         setErrors({});

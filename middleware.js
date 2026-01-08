@@ -1,6 +1,7 @@
 // middleware.js
 import { NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
+import { enRoles } from "./app/utils/roles";
 
 export function middleware(req) {
   const token = req.cookies.get("accessToken")?.value;
@@ -17,16 +18,18 @@ export function middleware(req) {
     // Decode token
     const decoded = jwtDecode(token);
 
-    const role = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+    const role = decoded["role"];
+
+    let roleName = enRoles[role];
 
     // Protect dashboard → only Admins
-    if (url.pathname.startsWith("/dashboard") && role.toLowerCase() !== "owner" && role.toLowerCase() != "admin") {
+    if (url.pathname.startsWith("/dashboard") && roleName.toLowerCase() !== "owner" && roleName.toLowerCase() != "admin") {
       url.pathname = "/unauthorized";
       return NextResponse.redirect(url);
     }
 
     // Protect owner-only routes
-    if (url.pathname.startsWith("/owner-panel") && role.toLowerCase() !== "owner") {
+    if (url.pathname.startsWith("/owner-panel") && roleName.toLowerCase() !== "owner") {
       url.pathname = "/unauthorized";
       return NextResponse.redirect(url);
     }

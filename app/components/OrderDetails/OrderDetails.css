@@ -1,0 +1,49 @@
+.order-details {
+
+}
+.order-details {
+  background-color: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  margin: 3rem auto;
+  padding: 2rem;}
+
+.order-details h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.section {
+  background-color: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--card-shadow);
+}
+
+.section h2 {
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+table th, table td {
+  padding: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+table th {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+table td {
+  color: var(--text-secondary);
+}

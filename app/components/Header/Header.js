@@ -39,7 +39,8 @@ export default function Header() {
   const navLinks = [
     { href: "/", label: "الصفحة الرئيسية" },
     { href: "/products", label: "المنتجات" },
-    // { href: "/discounts", label: "مؤقت" },
+    { href: "/orders", label: "الطلبات" },
+    { href: "/address", label: "العناوين" },
     { href: "/store-policy", label: "سياسة المتجر" },
   ];
 

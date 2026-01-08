@@ -4,6 +4,7 @@ import { Signin, logout as Logout, register as Register } from "../services/Auth
 import {jwtDecode} from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { setCookie, getCookie, deleteCookie } from "../utils/cookies.js";
+import { enRoles } from "../utils/roles";
 
 
 export const AuthContext = createContext();
@@ -77,8 +78,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const owner = user?.role?.toLowerCase() === "owner";
-    const admin = user?.role?.toLowerCase() === "admin";
+
+
+    
+    // const owner = user?.role?.toLowerCase() === "owner";
+    const owner = enRoles[user?.role] == "owner";
+    const admin = enRoles[user?.role] == "admin";
+
+    console.log("User Role:", user, "Is Owner:", owner, "Is Admin:", admin);
     setIsOwner(owner);
     setIsAdmin(admin);
   }, [user]);
@@ -86,11 +93,12 @@ export const AuthProvider = ({ children }) => {
   const setUserInformation = (token) => {
     if (!token) return;
 
+
     const jwtDecoded = jwtDecode(token);
-    const userId = jwtDecoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-    const email = jwtDecoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'];
-    const name = jwtDecoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
-    const role = jwtDecoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    const userId = Number(jwtDecoded['sub']);
+    const email = jwtDecoded['email'];
+    const name = jwtDecoded['name'];
+    const role = jwtDecoded['role'];
 
     setUser({ userId, email, name, role });
   };
@@ -98,8 +106,9 @@ export const AuthProvider = ({ children }) => {
   // ===== Auth actions =====
   const login = async (email, password) => {
     const res = await Signin(email, password);
-
+    
     if (res?.isSuccess) {
+      
       setCookie("accessToken", res.data.accessToken); // store in cookie
       setAccessToken(res.data.accessToken);
       setIsAuthenticated(true);
@@ -108,6 +117,7 @@ export const AuthProvider = ({ children }) => {
     } else {
       deleteCookie("accessToken");
     }
+
     return res;
   };
 

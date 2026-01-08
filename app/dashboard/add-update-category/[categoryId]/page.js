@@ -12,15 +12,14 @@ export default function AddUpdateCategory() {
   const router = useRouter();
   const { setToast } = useAuth();
   const [categories, setCategories] = useState([]);
-  const isAddMode = categoryId === "0";
+  const isAddMode = categoryId == "0";
   const { setLoading, loading } = useLoading();
 
   const [form, setForm] = useState({
     id: null,
     name: "",
-    imgUrl: "",
-    parentId: 0,
-    productCount: 0
+    img_url: "",
+    parentId: null,
   });
 
   const [uploading, setUploading] = useState(false);
@@ -32,6 +31,7 @@ export default function AddUpdateCategory() {
     const fetchCategories = async () => {
       setLoading(true);
       const res = await apiFetch("/categories");
+      console.log("Categories List -> ", res)
       if (res?.length > 0) setCategories(res);
       setLoading(false);
     };
@@ -45,19 +45,18 @@ export default function AddUpdateCategory() {
     const fetchCategory = async () => {
       try {
         setLoading(true);
-        const res = await apiFetch(`/Categories/${categoryId}`,{}, false);
+        const res = await apiFetch(`/categories/${categoryId}`,{}, false);
         if (!res) throw new Error("لم يتم العثور على الفئة");
 
         setForm({
           id: res.id,
           name: res.name || "",
-          imgUrl: res.imgUrl || "",
-          parentId: res.parentId || 0,
-          productCount: res.productCount || 0
+          img_url: res.img_url || "",
+          parentId: res.parent_id || null,
         });
 
-        if (res.imgUrl) {
-          const url = await getImageSrc(res.imgUrl);
+        if (res.img_url) {
+          const url = await getImageSrc(res.img_url);
           setResolvedImgUrl(url || "/CategoryImage-Temp.jpg");
         }
 
@@ -88,11 +87,13 @@ export default function AddUpdateCategory() {
 
   const validateForm = () => {
     if (!form.name.trim()) return "الاسم مطلوب";
-    if (!form.imgUrl && !selectedImage) return "الصورة مطلوبة";
+    if (!form.img_url && !selectedImage) return "الصورة مطلوبة";
     return null;
   };
 
   const handleSave = async () => {
+
+    alert(JSON.stringify(form))
     setLoading(true);
 
     const validationError = validateForm();
@@ -103,40 +104,39 @@ export default function AddUpdateCategory() {
     }
 
     try {
-      let uploadedKey = form.imgUrl;
+      // let uploadedKey = form.img_url;
+
 
       // If a new image is selected, upload it
-      if (selectedImage) {
-        setUploading(true);
-        const formData = new FormData();
-        formData.append("file", selectedImage);
+      // if (selectedImage) {
+      //   setUploading(true);
+        // const formData = new FormData();
+        // formData.append("file", selectedImage);
 
         // upload to cloudflare
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Files/upload`, {
-          method: "POST",
-          body: formData
-        });
+        // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Files/upload`, {
+        //   method: "POST",
+        //   body: formData
+        // });
 
-        if (!res.ok) throw new Error("فشل رفع الصورة");
+        // if (!res.ok) throw new Error("فشل رفع الصورة");
 
-        const data = await res.json();
-        uploadedKey = data.data.key;
+        // const data = await res.json();
+        // uploadedKey = data.data.key;
 
-        // Resolve the uploaded URL to display after save
-        const resolvedUrl = await getImageSrc(uploadedKey);
-        setResolvedImgUrl(resolvedUrl || "/CategoryImage-Temp.jpg");
+        // // Resolve the uploaded URL to display after save
+        // const resolvedUrl = await getImageSrc(uploadedKey);
+        // setResolvedImgUrl(resolvedUrl || "/CategoryImage-Temp.jpg");
 
-        setUploading(false);
-      }
-
-      // Save category
+        // setUploading(false);
       const saveRes = await apiFetch(
-        isAddMode ? `/Categories` : `/Categories/${categoryId}`,
+        isAddMode ? `/categories` : `/categories/${categoryId}`,
         {
           method: isAddMode ? "POST" : "PUT",
-          body: JSON.stringify({ name: form.name, imgUrl: uploadedKey, parentId: form.parentId })
+          body: JSON.stringify({ name: form.name, img_url: selectedImage ? null : form.img_url, parent_id: form.parentId })
         }
       );
+
 
       if (saveRes.isSuccess) {
         setToast({
@@ -147,8 +147,9 @@ export default function AddUpdateCategory() {
         router.push("/dashboard");
       } else {
         throw new Error(saveRes?.information || "فشلت العملية");
+      }  
       }
-    } catch (err) {
+       catch (err) {
       setToast({ error: true, message: err.information || err.message || "حدث خطأ أثناء الحفظ", show: true });
       setUploading(false);
     } finally {
@@ -164,16 +165,30 @@ export default function AddUpdateCategory() {
       <input name="name" value={form.name} onChange={handleChange} />
 
       <label>تتبع لفئة اخرى؟</label>
-      <select onChange={(e) => setForm({ ...form, parentId: e.target.value })} value={form.parentId || 0}>
-        <option value={0}>لا</option>
+<select
+  value={form.parentId ?? 0}
+  onChange={(e) => {
+    const value = Number(e.target.value);
+    setForm(prev => ({
+      ...prev,
+      parentId: value === 0 ? null : value
+    }));
+  }}
+>
+  <option value={0}>لا</option>
         <optgroup>
-          {categories.map(c => c.id != categoryId && (
-            <option disabled={c.parentId == categoryId} value={c.id} key={c.id}>
-              {c.fullPath}
-            </option>
-          ))}
+{
+  categories.map((cat) => {
+    if (cat.id == categoryId) return;
+
+             return   <option disabled={cat.parent_id == categoryId} value={cat.id} key={cat.id}>
+              {cat.name}
+            </option>  })  
+}
         </optgroup>
       </select>
+
+
 
       <label>رفع صورة *</label>
       <input type="file" accept="image/*" onChange={handleFileSelect} />
@@ -185,12 +200,12 @@ export default function AddUpdateCategory() {
         </div>
       )}
 
-      {!isAddMode && (
+      {/* {!isAddMode && (
         <div>
           <label>عدد المنتجات</label>
           <input value={form.productCount} disabled />
         </div>
-      )}
+      )} */}
 
       <button disabled={loading || uploading} onClick={handleSave}>
         {isAddMode ? "إضافة الفئة" : "تحديث الفئة"}

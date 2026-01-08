@@ -21,7 +21,7 @@ export default function DashboardCategory() {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const res = await apiFetch("/Categories");
+      const res = await apiFetch("/categories");
       if (res && Array.isArray(res)) {
         setCategories(res);
       } else {

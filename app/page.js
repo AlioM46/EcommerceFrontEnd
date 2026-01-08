@@ -49,8 +49,8 @@ export default async function Home() {
     </div>
 
 <CategoriesLine/>
-<Section category ={"ملابس النوم والداخلية"} headerText = "القسم المميز" showLink={true} linkText = "عرض المزيد" />
-<Section category = {"أطفال"} headerText = "الأطفال" showLink={true} linkText = "عرض المزيد"/>
+<Section category ={"Men"} headerText = "Men" showLink={true} linkText = "عرض المزيد" />
+<Section category = {"Women"} headerText = "Women" showLink={true} linkText = "عرض المزيد"/>
     </div>
   );  
 }
