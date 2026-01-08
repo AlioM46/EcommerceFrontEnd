@@ -31,7 +31,6 @@ export default function AddUpdateCategory() {
     const fetchCategories = async () => {
       setLoading(true);
       const res = await apiFetch("/categories");
-      console.log("Categories List -> ", res)
       if (res?.length > 0) setCategories(res);
       setLoading(false);
     };

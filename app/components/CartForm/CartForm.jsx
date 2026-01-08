@@ -5,6 +5,7 @@ import Button from "../Button/Button";
 import { useAuth } from "@/app/context/AuthContext";
 import apiFetch from "@/app/services/apiFetchService";
 import Link from "next/link";
+import { stripePromise } from "@/app/utils/stripe";
 
 export default function CheckoutForm() {
   const { cartItems , setCartItems} = useAuth();
@@ -72,7 +73,7 @@ export default function CheckoutForm() {
       quantity: item.qty || 1,
     }));
 
-    const checkoutAndPaymentIntent = await apiFetch("/checkout", {
+    const response = await apiFetch("/checkout", {
       method: "POST",
       body: JSON.stringify({
         address_id: formData.address_id,
@@ -80,11 +81,25 @@ export default function CheckoutForm() {
       }),
     });
 
-    if (checkoutAndPaymentIntent.isSuccess) {
-      window.location.href = `/checkout/${checkoutAndPaymentIntent.client_secret}`;
-      setCartItems([]);
-      window.localStorage.setItem("cart", JSON.stringify([]));
+
+    if (!response?.isSuccess) {
+
+      alert("Failed to create checkout session. Please try again.");
+      return;
     }
+    const { sessionUrl } = response; 
+    
+
+
+  if (sessionUrl) {
+    
+    setCartItems([]);
+    window.localStorage.setItem("cart", JSON.stringify([]));
+    
+    window.location.href = sessionUrl;
+
+
+  }
   };
 
   return (

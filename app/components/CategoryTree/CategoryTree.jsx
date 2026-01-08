@@ -9,7 +9,6 @@ export default function CategoryTree({ category }) {
   const [showSub, setShowSub] = useState(false);
 
 
-  console.log(category.subCategories)
   return (
     <div className="category-item" style={{ marginLeft: category.ParentId ? 20 : 0 }}>
       <div className="category-header">

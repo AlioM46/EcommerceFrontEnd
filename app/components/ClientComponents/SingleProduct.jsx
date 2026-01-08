@@ -54,7 +54,6 @@ export default function Product() {
     const fetchProduct = async () => {
       setLoading(true)
       const res = await apiFetch(`/product/${productId}`);
-      console.log(res.data);
 
       
       setProduct(res.data);

@@ -29,7 +29,6 @@ export default function CategoryCard({ id, name, imgUrl, productCount, fetchCate
 
   },[imgUrl])
 
-  console.log("RES",resolvedImage)
 
 
   // DELETE handler

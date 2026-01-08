@@ -30,7 +30,6 @@ export default function Section({ category, headerText, showLink, linkText }) {
     fetchCategory()
   }, [category, showLink])
 
-  console.log(url) // now this will update after fetch
 
   return (
     <div className='section-container'>

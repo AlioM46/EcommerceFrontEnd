@@ -23,7 +23,6 @@ export default function ProductCard({ product }) {
   // Resolve pre-signed URL asynchronously
   useEffect(() => {
     const fetchImage = async () => {
-      console.log()
       if (images?.length > 0) {
         const url = await getImageSrc(images[0].url);
         setImgSrc(url || "/ProductImage-Temp.jpg");

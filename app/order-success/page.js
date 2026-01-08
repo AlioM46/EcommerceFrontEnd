@@ -2,8 +2,32 @@
 
 import Link from "next/link";
 import "./order-success.css";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function OrderSuccessPage() {
+  const searchParams = useSearchParams();
+  const orderId = searchParams.get("orderId");
+
+  const [timer, setTimer] = useState(5);
+
+  useEffect(() => {
+    if (!orderId) return;
+
+    if (timer === 0) {
+      window.location.href = `/orders/${orderId}`;
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      setTimer((t) => t - 1);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [timer, orderId]);
+
+  if (!orderId) return <p>Loading...</p>;
+
   return (
     <div className="success-wrapper">
       <div className="success-card">
@@ -30,6 +54,10 @@ export default function OrderSuccessPage() {
         </p>
 
         <div className="success-actions">
+          <Link href={`/orders/${orderId}`}>
+            <button className="btn-success">View Order #{orderId}</button>
+          </Link>
+
           <Link href="/orders">
             <button className="btn-success">View My Orders</button>
           </Link>
@@ -37,6 +65,8 @@ export default function OrderSuccessPage() {
           <Link href="/">
             <button className="btn-secondary">Continue Shopping</button>
           </Link>
+
+          <p className="timer">Redirecting in {timer} seconds…</p>
         </div>
       </div>
     </div>

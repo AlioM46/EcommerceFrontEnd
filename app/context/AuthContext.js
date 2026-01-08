@@ -85,7 +85,6 @@ export const AuthProvider = ({ children }) => {
     const owner = enRoles[user?.role] == "owner";
     const admin = enRoles[user?.role] == "admin";
 
-    console.log("User Role:", user, "Is Owner:", owner, "Is Admin:", admin);
     setIsOwner(owner);
     setIsAdmin(admin);
   }, [user]);
