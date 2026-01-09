@@ -19,16 +19,20 @@ export default function CategoryProducts({ params, searchParams }) {
   const [selectedFilter, setSelectedFilter] = useState(1);
   const [categoryTree, setCategoryTree] = useState([]);
   const [breadcrumb, setBreadcrumb] = useState([]);
-  const [isMobile, setIsMobile] = useState(false);
+
 
 
 
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const res = await apiFetch(`/Categories/tree/${categoryId}`);
-        setCategoryTree(res.subCategories || []);
+        const res = await apiFetch(`/categories/tree/${categoryId}`);
+
+        console.log(res);
+        setCategoryTree(res.children || []);
         setBreadcrumb(res.breadcrumb || []);
+
+
       } catch (err) {
         console.error("Failed to fetch category tree:", err);
       }

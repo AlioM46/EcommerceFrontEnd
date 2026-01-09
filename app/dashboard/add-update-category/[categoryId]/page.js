@@ -10,7 +10,7 @@ import { getImageSrc } from "@/app/utils/handleUrls";
 export default function AddUpdateCategory() {
   const { categoryId } = useParams();
   const router = useRouter();
-  const { setToast } = useAuth();
+  const { setToast, accessToken } = useAuth();
   const [categories, setCategories] = useState([]);
   const isAddMode = categoryId == "0";
   const { setLoading, loading } = useLoading();
@@ -23,7 +23,7 @@ export default function AddUpdateCategory() {
   });
 
   const [uploading, setUploading] = useState(false);
-  const [resolvedImgUrl, setResolvedImgUrl] = useState("/CategoryImage-Temp.jpg");
+  const [resolvedImgUrl, setResolvedImgUrl] = useState("/ProductImage-Temp.jpg");
   const [selectedImage, setSelectedImage] = useState(null); // File object for new image
 
   // Fetch categories list
@@ -50,13 +50,13 @@ export default function AddUpdateCategory() {
         setForm({
           id: res.id,
           name: res.name || "",
-          img_url: res.img_url || "",
+          img_url: res.full_img_url || "",
           parentId: res.parent_id || null,
         });
 
-        if (res.img_url) {
-          const url = await getImageSrc(res.img_url);
-          setResolvedImgUrl(url || "/CategoryImage-Temp.jpg");
+
+        if (res.full_img_url) {
+          setResolvedImgUrl(res.full_img_url || "/ProductImage-Temp.jpg");
         }
 
         setLoading(false);
@@ -69,14 +69,73 @@ export default function AddUpdateCategory() {
     fetchCategory();
   }, [categoryId, isAddMode, setToast]);
 
-  // Handle file selection
+  // Handle file selection + add-by-link
+  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+  const [imageLink, setImageLink] = useState("");
+  const [linkLoading, setLinkLoading] = useState(false);
+
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setSelectedImage(file);
+    // Revoke previous temporary URL if any
+    if (selectedImageUrl) {
+      URL.revokeObjectURL(selectedImageUrl);
+    }
+
     const tempUrl = URL.createObjectURL(file);
+    setSelectedImage(file);
+    setSelectedImageUrl(tempUrl);
     setResolvedImgUrl(tempUrl); // immediately show preview
+
+    // Clear any previous image link
+    setImageLink("");
+  };
+
+  useEffect(() => {
+    return () => {
+      if (selectedImageUrl) URL.revokeObjectURL(selectedImageUrl);
+    };
+  }, [selectedImageUrl]);
+
+  const handleImageLinkChange = (e) => {
+    setImageLink(e.target.value);
+  };
+
+  const handleAddImageLink = async () => {
+    if (!imageLink || !/^https?:\/\//i.test(imageLink)) {
+      setToast({ error: true, message: 'أدخل رابط صورة صالح (http/https)', show: true });
+      return;
+    }
+
+    try {
+      setLinkLoading(true);
+      // Try resolving the link (handles IDs / storage keys if needed)
+      const resolved = await getImageSrc(imageLink).catch(() => imageLink);
+
+      // set as the category image URL and clear any selected file
+      setForm(prev => ({ ...prev, img_url: resolved || imageLink }));
+      setResolvedImgUrl(resolved || imageLink);
+      setSelectedImage(null);
+
+      // clear link input
+      setImageLink("");
+    } catch (err) {
+      setToast({ error: true, message: 'فشل تحميل الصورة من الرابط', show: true });
+    } finally {
+      setLinkLoading(false);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setForm(prev => ({ ...prev, img_url: '' }));
+    setResolvedImgUrl('/ProductImage-Temp.jpg');
+    if (selectedImageUrl) {
+      URL.revokeObjectURL(selectedImageUrl);
+      setSelectedImageUrl(null);
+      setSelectedImage(null);
+    }
+    setImageLink("");
   };
 
   const handleChange = (e) => {
@@ -91,8 +150,6 @@ export default function AddUpdateCategory() {
   };
 
   const handleSave = async () => {
-
-    alert(JSON.stringify(form))
     setLoading(true);
 
     const validationError = validateForm();
@@ -103,52 +160,67 @@ export default function AddUpdateCategory() {
     }
 
     try {
-      // let uploadedKey = form.img_url;
+      let uploadedUrl = form.img_url;
+
+      // If a new image is selected, upload it to the storage service
+      if (selectedImage) {
 
 
-      // If a new image is selected, upload it
-      // if (selectedImage) {
-      //   setUploading(true);
-        // const formData = new FormData();
-        // formData.append("file", selectedImage);
+        setUploading(true);
 
-        // upload to cloudflare
-        // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Files/upload`, {
-        //   method: "POST",
-        //   body: formData
-        // });
+        const formData = new FormData();
+        formData.append("file", selectedImage);
 
-        // if (!res.ok) throw new Error("فشل رفع الصورة");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/storage/upload`, {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
 
-        // const data = await res.json();
-        // uploadedKey = data.data.key;
-
-        // // Resolve the uploaded URL to display after save
-        // const resolvedUrl = await getImageSrc(uploadedKey);
-        // setResolvedImgUrl(resolvedUrl || "/CategoryImage-Temp.jpg");
-
-        // setUploading(false);
-      const saveRes = await apiFetch(
-        isAddMode ? `/categories` : `/categories/${categoryId}`,
-        {
-          method: isAddMode ? "POST" : "PUT",
-          body: JSON.stringify({ name: form.name, img_url: selectedImage ? null : form.img_url, parent_id: form.parentId })
+        if (!res.ok) {
+          const errPayload = await res.json().catch(() => ({}));
+          throw new Error(errPayload.message || "فشل رفع الصورة");
         }
-      );
 
+
+        const json = await res.json();
+        uploadedUrl = json?.data?.key;
+        if (!uploadedUrl) throw new Error("لم يتم إرجاع رابط الصورة بعد الرفع");
+
+        // update preview to resolved uploaded URL
+        const resolved = await getImageSrc(uploadedUrl).catch(() => uploadedUrl);
+        setResolvedImgUrl(resolved || uploadedUrl);
+
+        // cleanup selected image state
+        setSelectedImage(null);
+        if (selectedImageUrl) {
+          URL.revokeObjectURL(selectedImageUrl);
+          setSelectedImageUrl(null);
+        }
+
+        setUploading(false);
+      }
+
+      const payload = {
+        name: form.name,
+        img_url: uploadedUrl || null,
+        parent_id: form.parentId
+      };
+
+      const saveRes = await apiFetch(isAddMode ? `/categories` : `/categories/${categoryId}`, {
+        method: isAddMode ? "POST" : "PUT",
+        body: JSON.stringify(payload)
+      });
 
       if (saveRes.isSuccess) {
-        setToast({
-          error: false,
-          message: isAddMode ? "تمت إضافة الفئة بنجاح" : "تم تحديث الفئة بنجاح",
-          show: true
-        });
+        setToast({ error: false, message: isAddMode ? "تمت إضافة الفئة بنجاح" : "تم تحديث الفئة بنجاح", show: true });
         router.push("/dashboard");
       } else {
         throw new Error(saveRes?.information || "فشلت العملية");
-      }  
       }
-       catch (err) {
+    } catch (err) {
       setToast({ error: true, message: err.information || err.message || "حدث خطأ أثناء الحفظ", show: true });
       setUploading(false);
     } finally {
@@ -191,6 +263,22 @@ export default function AddUpdateCategory() {
 
       <label>رفع صورة *</label>
       <input type="file" accept="image/*" onChange={handleFileSelect} />
+
+      <div className="image-link-row">
+        <input
+          className="image-link-input"
+          placeholder="أدخل رابط الصورة (مثال: https://example.com/img.jpg)"
+          value={imageLink}
+          onChange={handleImageLinkChange}
+        />
+        <button type="button" className="image-link-button" onClick={handleAddImageLink} disabled={linkLoading}>
+          {linkLoading ? 'جاري التحميل...' : 'أضف الرابط'}
+        </button>
+        <button type="button" className="remove-image-button" onClick={handleRemoveImage}>
+          إزالة الصورة
+        </button>
+      </div>
+
       {(uploading || loading) && <p>جارٍ المعالجة...</p>}
 
       {resolvedImgUrl && (

@@ -24,20 +24,21 @@ export default function ProductCarousel({ category }) {
         setLoading(true);
         setLoadingSkeleton(true);
 
-        const response = await apiFetch(`/Product`);
+        const response = await apiFetch(`/product`);
         const filteredProducts = [];
 
-        if (response && Array.isArray(response)) {
-          for (let i = 0; i < response.length; i++) {
+        console.log(response.data);
+        if (response.data && Array.isArray(response.data)) {
+          for (let i = 0; i < response.data.length; i++) {
             if (filteredProducts.length >= 12) break;
-
+            console.log(response.data[i]);
             if (
-              Array.isArray(response[i].categories) &&
-              response[i].categories.some(
-                (cat) => cat.toLowerCase() === category.toLowerCase()
+              Array.isArray(response.data[i].categories) &&
+              response.data[i].categories.some(
+                (cat) => cat.name.toLowerCase() === category.toLowerCase()
               )
             ) {
-              filteredProducts.push(response[i]);
+              filteredProducts.push(response.data[i]);
             }
           }
         }

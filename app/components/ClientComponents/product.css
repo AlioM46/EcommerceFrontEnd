@@ -155,6 +155,17 @@
     .prd-product-buttons button {
         min-width: 100% !important;
     }
+    .prd-product-container {
+        padding: 1rem;
+    }
+
+    .prd-main-image-wrapper {
+        width: 100%;
+    }
+
+    .prd-main-image {
+        width: 100%;
+    }
 }
 
 /* RIGHT SIDE (IMAGES) */
@@ -164,12 +175,15 @@
     gap: 0.5rem;
 }
 
+.prd-main-image-wrapper {
+        min-width: 350px;
+    max-width: 450px;  
+}
 /* MAIN PRODUCT IMAGE */
 .prd-main-image {
-    min-width:300px;
-    width: 100%;           
-    max-width: 550px;      
-    aspect-ratio: 1 / 1.2; 
+
+    min-width: 350px;
+    max-width: 450px;  
     object-fit: contain;   
     border-radius: 8px;
 }
@@ -222,6 +236,7 @@
     z-index: 10;
 }
 
+
 .prd-size-tag,
 .prd-color-circle {
     border: 1px solid var(--border-color);
@@ -248,3 +263,4 @@
     background: var(--text-link) !important;
     color: white !important;
 }
+

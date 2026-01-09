@@ -22,7 +22,6 @@ export default function Product() {
   
   const [resolvedImages, setResolvedImages] = useState([]);
 
-  const productImagesUrls = product.images || [];
 
 
 
@@ -34,19 +33,6 @@ export default function Product() {
   const [slidePosition, setSlidePosition] = useState(0);
 
   
-  useEffect(() => {
-  if (!productImagesUrls || productImagesUrls.length === 0) return;
-
-
-  Promise.all(productImagesUrls.map(url => getImageSrc(url)))
-    .then(urls => {
-      setResolvedImages(urls);
-      setCurrentImage(urls[0] || "/ProductImage-Temp.jpg");
-    })
-    .catch(err => console.error(err));
-
-
-}, [productImagesUrls]);
 
 
 
@@ -57,15 +43,23 @@ export default function Product() {
 
       
       setProduct(res.data);
-      setCurrentImage(res.data?.images[0]?.url || "/ProductImage-Temp.jpg");
+      setCurrentImage(res.data?.images[0]?.full_url || "/ProductImage-Temp.jpg");
       setChosenColor(res.data?.colors[0]?.color)
       setChosenSize(res.data?.sizes[0]?.size )
       setLoading(false)
+    setResolvedImages(res.data.images || []);
 
+      
     }
     fetchProduct();
 
   }, [productId]);
+
+    useEffect(() => {
+
+      console.log(product)
+
+  }, [product]);
 
 
   const orderByWhatsapp = () => {
@@ -247,12 +241,13 @@ message += `\n📅 التاريخ: ${date}\n⏰ الساعة: ${time}`;
             ref={imagesListRef}
             style={{ transform: `translateX(${slidePosition}px)` }}
           >
-            {resolvedImages?.map((imgUrl, i) => (
+            {resolvedImages?.map((imgItem, i) => (
               <img
+              className="prd-thumbnail-image"
                 key={i}
-                src={imgUrl || "/ProductImage-Temp.jpg"}
+                src={imgItem.full_url || "/ProductImage-Temp.jpg"}
                 alt="product thumbnail"
-                onClick={() => setCurrentImage(imgUrl || "/ProductImage-Temp.jpg")}
+                onClick={() => setCurrentImage(imgItem.full_url || "/ProductImage-Temp.jpg")}
               />
             ))}
           </div>

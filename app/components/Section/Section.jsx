@@ -12,12 +12,15 @@ export default function Section({ category, headerText, showLink, linkText }) {
 
   useEffect(() => {
     const fetchCategory = async () => {
+
       try {
-        if (category?.length > 0) {
+        if (category?.length > 0 && category!="" ) {
           setLoading(true)
-          const res = await apiFetch(`/Categories/byname/${category}`)
+          const res = await apiFetch(`/categories/byname/${category}`)
+          console.log("Fetched category:", res)
+
           if (res != null && showLink === true) {
-            setUrl(`/category/${res.id}?name=${res.name}`) // <-- update state
+            setUrl(`/category/${res.id}?name=${res.name}`)
           }
         }
       } catch(err) {
@@ -28,7 +31,7 @@ export default function Section({ category, headerText, showLink, linkText }) {
     }
 
     fetchCategory()
-  }, [category, showLink])
+  }, [category])
 
 
   return (

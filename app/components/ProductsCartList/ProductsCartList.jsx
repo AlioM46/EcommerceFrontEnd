@@ -12,17 +12,28 @@ export default function ProductsList() {
 
 
  function handleChangeQty(prod, newQty) {
+  
+  console.log(prod)
   const updated = cartItems.map(p =>
-    p.id === prod.id ? { ...p, qty: newQty } : p
+    p.id === prod.id  && p.size == prod.size && p.color == prod.color ? { ...p, qty: newQty } : p
   );
   setCartItems(updated);
   window.localStorage.setItem("cart", JSON.stringify(updated));
+
 }
 
 function handleRemove(prod) {
-  const updated = cartItems.filter(p => p.id !== prod.id);
+  const updated = cartItems.filter(p =>
+    !(
+      p.id === prod.id &&
+      p.size === prod.size &&
+      p.color === prod.color
+    )
+  );
+
   setCartItems(updated);
   window.localStorage.setItem("cart", JSON.stringify(updated));
+  
 }
 
   return (

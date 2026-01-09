@@ -67,7 +67,7 @@ export default function DashboardCategory() {
               key={category.id}
               id={category.id}
               name={category.name}
-              imgUrl={category.imgUrl}
+              full_img_url={category.full_img_url}
               productCount={category.productCount}
               fetchCategories={fetchCategories}
             />

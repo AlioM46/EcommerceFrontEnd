@@ -8,7 +8,7 @@ import { useLoading } from "@/app/context/LoadingContext";
 
 export default function AddUpdateProduct() {
   const { productId } = useParams();
-  const { setToast } = useAuth();
+  const { setToast, accessToken } = useAuth();
   const router = useRouter();
   const isAddMode = productId === "0";
 
@@ -30,7 +30,7 @@ export default function AddUpdateProduct() {
     category_ids: [],
     colors: [],
     sizes: [],
-    images: [] // EXISTING image URLs from DB
+    images: [] // EXISTING image URLs from DB || uploaded images from file input
   });
 
   /* ================= FILE STATES ================= */
@@ -48,6 +48,8 @@ export default function AddUpdateProduct() {
   useEffect(() => {
     if (isAddMode) return;
 
+
+    
     async function fetchProduct() {
       try {
         setLoading(true);
@@ -59,8 +61,9 @@ export default function AddUpdateProduct() {
           category_ids: data.categories?.map(c => c.id) || [],
           colors: data.colors?.map(c => c.color) || [],
           sizes: data.sizes?.map(s => s.size) || [],
-          images: data.images?.map(i => i.url) || []
+          images: data.images?.map(i => i.full_url) || []
         });
+
       } catch {
         setToast({ error: true, message: "فشل تحميل المنتج", show: true });
       } finally {
@@ -95,9 +98,20 @@ export default function AddUpdateProduct() {
   /* ================= FILE SELECTION ================= */
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
+
+    // Revoke any previous object URLs to avoid memory leaks
+    selectedUrls.forEach(u => URL.revokeObjectURL(u));
+
     setSelectedFiles(files);
     setSelectedUrls(files.map(f => URL.createObjectURL(f)));
   };
+
+  // Revoke object URLs on unmount to avoid leaks
+  useEffect(() => {
+    return () => {
+      selectedUrls.forEach(u => URL.revokeObjectURL(u));
+    };
+  }, []);
 
   /* ================= SAVE ================= */
   const handleSave = async () => {
@@ -106,38 +120,51 @@ export default function AddUpdateProduct() {
     try {
       let uploadedUrls = [];
 
-      /* =====================================================
-         CLOUDFARE IMAGE UPLOAD
-         -----------------------------------------------------
-         ⚠️ KEEPING THIS CODE COMMENTED AS REQUESTED
-         =====================================================
-      */
-      /*
+      if (selectedFiles.length > 0 && !accessToken) {
+        setToast({ error: true, message: "You must be logged in to upload images", show: true });
+        setLoading(false);
+        return;
+      }
+
       for (const file of selectedFiles) {
         const fd = new FormData();
         fd.append("file", file);
 
         const uploadRes = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/Files/upload`,
-          { method: "POST", body: fd }
+          `${process.env.NEXT_PUBLIC_API_URL}/storage/upload`,
+          {
+            method: "POST",
+            body: fd,
+            headers: {
+              Authorization: accessToken ? `Bearer ${accessToken}` : ""
+            }
+          }
         );
 
+        if (!uploadRes.ok) {
+          const errPayload = await uploadRes.json().catch(() => ({}));
+          throw new Error(errPayload.message || 'Failed to upload image');
+        }
+
         const json = await uploadRes.json();
+
+        console.log("Upload response:", json);
+        
         if (json?.data?.key) uploadedUrls.push(json.data.key);
       }
-      */
 
-      /* =====================================================
-         IMAGE LOGIC
-         -----------------------------------------------------
-         - Existing DB images are preserved
-         - Uploaded images are appended
-         =====================================================
-      */
+
+
+
       const finalImages = [
         ...form.images.filter(Boolean),
         ...uploadedUrls
       ];
+
+      // cleanup selected files and object URLs
+      selectedUrls.forEach(u => URL.revokeObjectURL(u));
+      setSelectedFiles([]);
+      setSelectedUrls([]);
 
       const payload = {
         name: form.name,
@@ -181,11 +208,15 @@ export default function AddUpdateProduct() {
   return (
     <div className="update-product">
       <h2>{isAddMode ? "إضافة منتج" : "تعديل منتج"}</h2>
-
+    name
       <input name="name" value={form.name} onChange={handleChange} />
-      <textarea name="description" value={form.description} onChange={handleChange} />
+    description
+        <textarea name="description" value={form.description} onChange={handleChange} />
+      price
       <input type="number" name="price" value={form.price} onChange={handleChange} />
+      discount price
       <input type="number" name="discount_price" value={form.discount_price} onChange={handleChange} />
+      brand
       <input name="brand" value={form.brand} onChange={handleChange} />
 
       {/* CATEGORY */}
@@ -216,7 +247,21 @@ export default function AddUpdateProduct() {
         </div>
       ))}
 
-      <input type="file" multiple onChange={handleFileChange} />
+      <input type="file" multiple accept="image/*" onChange={handleFileChange} />
+
+      <div className="image-previews">
+        {selectedUrls.map((u, i) => (
+          <div key={u} className="preview-item">
+            <img src={u} alt={`selected-${i}`} width={120} height={80} />
+          </div>
+        ))}
+
+        {form.images.map((u, i) => (
+          <div key={`${u}-${i}`} className="preview-item">
+            <img src={u} alt={`existing-${i}`} width={120} height={80} />
+          </div>
+        ))}
+      </div>
 
       <button onClick={handleSave} disabled={loading}>
         {loading ? "جاري الحفظ..." : "حفظ"}

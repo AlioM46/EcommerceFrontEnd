@@ -58,6 +58,8 @@ export default function CheckoutForm() {
   };
 
   const handleCheckout = async () => {
+
+console.log("cartItems", cartItems);
     if (cartItems.length === 0) {
       alert("Your cart is empty.");
       return;
@@ -71,6 +73,8 @@ export default function CheckoutForm() {
     const order_products = cartItems.map(item => ({
       product_id: item.id,
       quantity: item.qty || 1,
+      size: item.size || null,
+      color: item.color || null
     }));
 
     const response = await apiFetch("/checkout", {

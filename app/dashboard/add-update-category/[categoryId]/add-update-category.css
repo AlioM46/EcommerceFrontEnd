@@ -55,3 +55,40 @@
   flex-direction: column;
   gap: 0.2rem;
 }
+
+.image-link-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.4rem;
+}
+
+.image-link-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.image-link-button {
+  padding: 0.5rem 0.8rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.image-link-button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.remove-image-button {
+  padding: 0.4rem 0.6rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

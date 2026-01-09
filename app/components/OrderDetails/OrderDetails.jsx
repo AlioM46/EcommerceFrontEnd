@@ -11,6 +11,7 @@ const OrderDetails = ({ orderId }) => {
   useEffect(() => {
     const fetchOrder = async () => {
       const data = await apiFetch(`/order/${orderId}`);
+      console.log(data);
       if (data) setOrder(data);
     };
     fetchOrder();
@@ -56,6 +57,8 @@ const OrderDetails = ({ orderId }) => {
               <th>Product</th>
               <th>Price</th>
               <th>Quantity</th>
+              <th>Size</th>
+              <th>Color</th>
               <th>Subtotal</th>
             </tr>
           </thead>
@@ -65,6 +68,8 @@ const OrderDetails = ({ orderId }) => {
                 <td ><Link href={`/products/${p.id}`}>{p.name}</Link></td>
                 <td>${p.pivot.price}</td>
                 <td>{p.pivot.quantity}</td>
+                <td>{p.pivot.size || "-"}</td>
+                <td style={{ color: p.pivot.color   }}>{p.pivot.color || "-"}</td>
                 <td>${(p.pivot.price * p.pivot.quantity).toFixed(2)}</td>
               </tr>
             ))}

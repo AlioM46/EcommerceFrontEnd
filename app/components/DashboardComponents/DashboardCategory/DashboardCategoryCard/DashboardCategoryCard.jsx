@@ -8,26 +8,10 @@ import Button from "@/app/components/Button/Button";
 import { useRouter } from "next/navigation";
 import { getImageSrc } from "@/app/utils/handleUrls";
 
-export default function CategoryCard({ id, name, imgUrl, productCount, fetchCategories }) {
+export default function CategoryCard({ id, name,  full_img_url, productCount, fetchCategories }) {
   const { setToast } = useAuth();
-
-
-
-  const  [resolvedImage, setResolvedImage] = useState()
   const router = useRouter();
 
-
-  useEffect(() => {
-
-    const fetchImg = async () => {
-          if (imgUrl) {
-      setResolvedImage(await getImageSrc(imgUrl));
-    }
-    }
-
-    fetchImg();
-
-  },[imgUrl])
 
 
 
@@ -53,7 +37,7 @@ export default function CategoryCard({ id, name, imgUrl, productCount, fetchCate
   return (
     <div className="category-card">
       <div className="category-image-wrapper">
-        <img src={resolvedImage} alt={name} className="category-image" />
+        <img src={full_img_url} alt={name} className="category-image" />
       </div>
 
       <div className="category-info">

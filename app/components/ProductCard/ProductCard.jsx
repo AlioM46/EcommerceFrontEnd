@@ -18,18 +18,14 @@ export default function ProductCard({ product }) {
   } = product;
 
   const { addToCart } = useAuth();
-  const [imgSrc, setImgSrc] = useState("/ProductImage-Temp.jpg"); // default placeholder
+  const [previewImage, setPreviewImage] = useState("/ProductImage-Temp.jpg"); // default placeholder
 
-  // Resolve pre-signed URL asynchronously
+
   useEffect(() => {
-    const fetchImage = async () => {
-      if (images?.length > 0) {
-        const url = await getImageSrc(images[0].url);
-        setImgSrc(url || "/ProductImage-Temp.jpg");
-      }
-    };
-    fetchImage();
-  }, [images]);
+    if (images.length > 0 && images[0].full_url) {
+      setPreviewImage(images[0].full_url);
+    }
+  },[images])
 
   const isThereDiscount = discount_price > 0;
   const discountPercentage = isThereDiscount
@@ -40,7 +36,7 @@ export default function ProductCard({ product }) {
     <div className="product-card">
       <Link href={`/products/${id}`}>
         <div className="product-image-wrapper">
-          <img src={imgSrc} alt={name} className="product-img" />
+          <img src={previewImage} alt={name} className="product-img" />
         </div>
       </Link>
 

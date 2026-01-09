@@ -8,7 +8,7 @@ import { useAuth } from "@/app/context/AuthContext";
 import { getImageSrc } from "@/app/utils/handleUrls";
 
 export default function DashboardProduct({ product, fetchProducts, currentPage }) {
-  const { name, price, productImagesUrl, discountPrice, inStock, isActive } = product;
+  const { name, price, images, discountPrice, inStock, isActive } = product;
   const [isProductActive, setIsProductActive] = useState(isActive);
   const [imgSrc, setImgSrc] = useState("/ProductImage-Temp.jpg"); // default placeholder
   const { setToast } = useAuth();
@@ -30,13 +30,13 @@ export default function DashboardProduct({ product, fetchProducts, currentPage }
   // Resolve image URL asynchronously
   useEffect(() => {
     const fetchImage = async () => {
-      if (productImagesUrl?.length > 0) {
-        const url = await getImageSrc(productImagesUrl[0]);
-        setImgSrc(url || "/ProductImage-Temp.jpg");
+      if (images?.length > 0) {
+
+        setImgSrc(images[0].full_url || "/ProductImage-Temp.jpg");
       }
     };
     fetchImage();
-  }, [productImagesUrl]);
+  }, [images]);
 
   const RemoveProduct = async () => {
     const res = await apiFetch(`/product/${product.id}`, { method: "DELETE" });

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { getImageSrc } from "@/app/utils/handleUrls";
 
 export default function ProductCard({ product, onChangeQty = () => {}, onRemove = () => {} }) {
-  const { name, price, productImagesUrl, deliveryText, discount_price, qty = 1 , color , size} = product;
+  const { name, price, images, discount_price, qty = 1 , color , size} = product;
 
   const [resolvedImage,  setResolvedImage] = useState()
   const router = useRouter();
@@ -30,17 +30,24 @@ export default function ProductCard({ product, onChangeQty = () => {}, onRemove 
     
   }
 
+
+
+
   useEffect(() => {
-    const getResolvedImage = async () => {
+    const getResolvedImage =  () => {
       try {
-        const url = await getImageSrc(productImagesUrl?.[0]);
-        setResolvedImage(url || "/ProductImage-Temp.jpg");
+       if (images && images.length > 0) {
+
+         setResolvedImage(images?.[0].full_url || "/ProductImage-Temp.jpg");
+       } else {
+          setResolvedImage("/ProductImage-Temp.jpg");
+       }
       } catch {
         setResolvedImage("/ProductImage-Temp.jpg");
       }
     };
     getResolvedImage(); // call it!
-  }, [productImagesUrl]);
+  }, [images]);
 
   return (
     <div className="pc-card" role="listitem">
@@ -56,7 +63,7 @@ export default function ProductCard({ product, onChangeQty = () => {}, onRemove 
       <div className="pc-imageWrap">
         <img
         onClick={() => SendToProductPage()}
-          src={resolvedImage}
+          src={resolvedImage }
           alt={name}
           className="pc-image"
         />
