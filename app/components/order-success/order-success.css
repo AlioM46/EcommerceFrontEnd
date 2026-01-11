@@ -1,0 +1,71 @@
+.success-wrapper {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  padding: 1rem;
+}
+
+.success-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  border: 1px solid var(--border-color);
+}
+
+.success-icon {
+  margin-bottom: 1rem;
+}
+
+.success-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--accent-success);
+}
+
+.success-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: var(--text-secondary);
+}
+
+.success-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn-success {
+  background-color: var(--accent-success);
+  color: #fff;
+  padding: 0.7rem 1.6rem;
+  border-radius: var(--btn-border-radius);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-success:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background-color: var(--accent-primary);
+  color: #fff;
+  padding: 0.7rem 1.6rem;
+  border-radius: var(--btn-border-radius);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: var(--accent-secondary);
+}
