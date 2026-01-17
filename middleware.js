@@ -1,40 +1,43 @@
-// middleware.js
 import { NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
 import { enRoles } from "./app/utils/roles";
 
 export function middleware(req) {
   const token = req.cookies.get("accessToken")?.value;
-
   const url = req.nextUrl.clone();
 
-  // If no token → send to login
+  // If no token -> login
   if (!token) {
-    url.pathname = "/login2";
+    url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
   try {
-    // Decode token
     const decoded = jwtDecode(token);
-
     const role = decoded["role"];
+    const isVerified = decoded["isVerified"];
+    const roleName = (enRoles[role] || "").toLowerCase();
 
-    let roleName = enRoles[role];
+    // ✅ redirect unverified users (avoid loop)
+    if (!isVerified && !url.pathname.startsWith("/verify-email")) {
+      url.pathname = "/verify-email";
+      // optional:
+      // url.searchParams.set("resend", "true");
+      return NextResponse.redirect(url);
+    }
 
-    // Protect dashboard → only Admins
-    if (url.pathname.startsWith("/dashboard") && roleName.toLowerCase() !== "owner" && roleName.toLowerCase() != "admin") {
+    // Admin/Owner protection
+    if (url.pathname.startsWith("/dashboard") && roleName !== "owner" && roleName !== "admin") {
       url.pathname = "/unauthorized";
       return NextResponse.redirect(url);
     }
 
-    // Protect owner-only routes
-    if (url.pathname.startsWith("/owner-panel") && roleName.toLowerCase() !== "owner") {
+    if (url.pathname.startsWith("/owner-panel") && roleName !== "owner") {
       url.pathname = "/unauthorized";
       return NextResponse.redirect(url);
     }
+
   } catch (err) {
-    console.error("Invalid token", err);
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
@@ -43,5 +46,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/owner-panel/:path*"], 
+  matcher: ["/dashboard/:path*", "/owner-panel/:path*"],
 };

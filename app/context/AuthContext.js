@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);    
   const [isOwner, setIsOwner] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isVerified , setIsVerified] = useState(false)
   const [cartItems, setCartItems] = useState([]);    
   const [toast, setToast] = useState({ show: false, message: "" , error: false });
   const [cartLength, setCartLength]  = useState(0)
@@ -85,6 +86,8 @@ export const AuthProvider = ({ children }) => {
     const owner = enRoles[user?.role] == "owner";
     const admin = enRoles[user?.role] == "admin";
 
+    
+
     setIsOwner(owner);
     setIsAdmin(admin);
   }, [user]);
@@ -98,7 +101,9 @@ export const AuthProvider = ({ children }) => {
     const email = jwtDecoded['email'];
     const name = jwtDecoded['name'];
     const role = jwtDecoded['role'];
+    const isVerified = jwtDecoded['isVerified']
 
+    setIsVerified(isVerified);
     setUser({ userId, email, name, role });
   };
 
